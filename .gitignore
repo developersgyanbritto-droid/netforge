@@ -1,0 +1,12 @@
+node_modules
+.next
+dist
+.env
+.env.local
+*.log
+coverage
+.turbo
+next-env.d.ts
+tools/local-db/.data
+**/e2e/.results
+**/e2e/screens

@@ -1,0 +1,17 @@
+{
+  "name": "netforge",
+  "private": true,
+  "version": "0.1.0",
+  "packageManager": "pnpm@11.25.0",
+  "scripts": {
+    "dev": "pnpm -r --parallel --filter @netforge/api --filter @netforge/web dev",
+    "build": "pnpm -r build",
+    "test": "pnpm -r test",
+    "typecheck": "pnpm -r typecheck",
+    "db:up": "docker compose up -d db",
+    "db:migrate": "pnpm --filter @netforge/api db:migrate",
+    "db:seed": "pnpm --filter @netforge/api db:seed",
+    "db:local": "pnpm --filter @netforge/local-db start",
+    "e2e": "pnpm --filter @netforge/web e2e"
+  }
+}

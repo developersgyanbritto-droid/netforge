@@ -1,0 +1,351 @@
+// NetForge Academy — relational model. See docs/ARCHITECTURE.md §3 for rationale.
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+enum Role {
+  STUDENT
+  INSTRUCTOR
+  ADMIN
+}
+
+enum TrackKind {
+  CORE
+  MIKROTIK
+}
+
+enum ActivityType {
+  LESSON
+  QUIZ
+  LAB
+  CHALLENGE
+  PROJECT
+}
+
+enum ProgressStatus {
+  NOT_STARTED
+  IN_PROGRESS
+  COMPLETED
+}
+
+enum Cert {
+  FUNDAMENTALS
+  CCNA
+  MTCNA
+}
+
+model User {
+  id               String   @id @default(cuid())
+  email            String   @unique
+  passwordHash     String
+  displayName      String
+  role             Role     @default(STUDENT)
+  xp               Int      @default(0)
+  dailyGoalMinutes Int      @default(30)
+  experience       String   @default("beginner")
+  createdAt        DateTime @default(now())
+  updatedAt        DateTime @updatedAt
+
+  sessions      Session[]
+  progress      ActivityProgress[]
+  attempts      Attempt[]
+  skills        UserSkill[]
+  studyDays     StudyDay[]
+  xpEvents      XpEvent[]
+  achievements  UserAchievement[]
+  notes         Note[]
+  bookmarks     Bookmark[]
+  topologies    SavedTopology[]
+  notifications Notification[]
+  auditLogs     AuditLog[]
+}
+
+model Session {
+  id        String   @id @default(cuid())
+  tokenHash String   @unique
+  userId    String
+  expiresAt DateTime
+  ip        String?
+  userAgent String?
+  createdAt DateTime @default(now())
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId])
+}
+
+model Track {
+  id          String    @id @default(cuid())
+  slug        String    @unique
+  title       String
+  description String
+  kind        TrackKind @default(CORE)
+  order       Int
+  modules     Module[]
+}
+
+model Module {
+  id          String   @id @default(cuid())
+  slug        String   @unique
+  trackId     String
+  title       String
+  summary     String
+  level       Int
+  order       Int
+  estMinutes  Int      @default(60)
+  published   Boolean  @default(true)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  track         Track                @relation(fields: [trackId], references: [id], onDelete: Cascade)
+  activities    Activity[]
+  prerequisites ModulePrerequisite[] @relation("module")
+  requiredBy    ModulePrerequisite[] @relation("requires")
+
+  @@index([trackId, order])
+}
+
+model ModulePrerequisite {
+  moduleId   String
+  requiresId String
+  module     Module @relation("module", fields: [moduleId], references: [id], onDelete: Cascade)
+  requires   Module @relation("requires", fields: [requiresId], references: [id], onDelete: Cascade)
+
+  @@id([moduleId, requiresId])
+}
+
+model Activity {
+  id          String       @id @default(cuid())
+  slug        String       @unique
+  moduleId    String
+  type        ActivityType
+  title       String
+  summary     String
+  order       Int
+  estMinutes  Int          @default(10)
+  difficulty  Int          @default(1) // 1..5
+  xp          Int          @default(20)
+  /// Typed JSON validated by @netforge/content schemas
+  content     Json
+  version     Int          @default(1)
+  published   Boolean      @default(true)
+  createdAt   DateTime     @default(now())
+  updatedAt   DateTime     @updatedAt
+
+  module    Module             @relation(fields: [moduleId], references: [id], onDelete: Cascade)
+  skills    ActivitySkill[]
+  progress  ActivityProgress[]
+  attempts  Attempt[]
+  bookmarks Bookmark[]
+  notes     Note[]
+
+  @@index([moduleId, order])
+  @@index([type])
+}
+
+model Skill {
+  id          String            @id @default(cuid())
+  slug        String            @unique
+  name        String
+  domain      String
+  description String            @default("")
+  activities  ActivitySkill[]
+  users       UserSkill[]
+  certDomains SkillCertDomain[]
+}
+
+model ActivitySkill {
+  activityId String
+  skillId    String
+  weight     Float    @default(1)
+  activity   Activity @relation(fields: [activityId], references: [id], onDelete: Cascade)
+  skill      Skill    @relation(fields: [skillId], references: [id], onDelete: Cascade)
+
+  @@id([activityId, skillId])
+  @@index([skillId])
+}
+
+model CertDomain {
+  id     String            @id @default(cuid())
+  cert   Cert
+  code   String
+  title  String
+  skills SkillCertDomain[]
+
+  @@unique([cert, code])
+}
+
+model SkillCertDomain {
+  skillId      String
+  certDomainId String
+  skill        Skill      @relation(fields: [skillId], references: [id], onDelete: Cascade)
+  certDomain   CertDomain @relation(fields: [certDomainId], references: [id], onDelete: Cascade)
+
+  @@id([skillId, certDomainId])
+}
+
+model ActivityProgress {
+  id           String         @id @default(cuid())
+  userId       String
+  activityId   String
+  status       ProgressStatus @default(NOT_STARTED)
+  bestScore    Int?
+  attempts     Int            @default(0)
+  timeSpentSec Int            @default(0)
+  /// Work-in-progress state, e.g. the learner's lab topology
+  draft        Json?
+  completedAt  DateTime?
+  lastSeenAt   DateTime       @default(now())
+
+  user     User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  activity Activity @relation(fields: [activityId], references: [id], onDelete: Cascade)
+
+  @@unique([userId, activityId])
+  @@index([userId, status])
+  @@index([activityId, status])
+}
+
+model Attempt {
+  id          String   @id @default(cuid())
+  userId      String
+  activityId  String
+  score       Int
+  passed      Boolean
+  durationSec Int      @default(0)
+  hintsUsed   Int      @default(0)
+  mistakes    Int      @default(0)
+  /// Per-question / per-check results (used for "common mistakes" analytics)
+  result      Json
+  createdAt   DateTime @default(now())
+
+  user     User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  activity Activity @relation(fields: [activityId], references: [id], onDelete: Cascade)
+
+  @@index([userId, activityId])
+  @@index([activityId, createdAt])
+  @@index([userId, createdAt])
+}
+
+model UserSkill {
+  userId          String
+  skillId         String
+  score           Float    @default(0)
+  evidence        Int      @default(0)
+  lastPracticedAt DateTime @default(now())
+
+  user  User  @relation(fields: [userId], references: [id], onDelete: Cascade)
+  skill Skill @relation(fields: [skillId], references: [id], onDelete: Cascade)
+
+  @@id([userId, skillId])
+}
+
+model StudyDay {
+  userId  String
+  day     DateTime @db.Date
+  minutes Int      @default(0)
+  xp      Int      @default(0)
+  user    User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@id([userId, day])
+}
+
+model XpEvent {
+  id         String   @id @default(cuid())
+  userId     String
+  amount     Int
+  reason     String
+  activityId String?
+  createdAt  DateTime @default(now())
+  user       User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId, createdAt])
+}
+
+model Achievement {
+  id          String            @id @default(cuid())
+  slug        String            @unique
+  title       String
+  description String
+  icon        String
+  /// { kind: "labs_completed", count: 5 } etc.
+  criteria    Json
+  xp          Int               @default(50)
+  users       UserAchievement[]
+}
+
+model UserAchievement {
+  userId        String
+  achievementId String
+  earnedAt      DateTime    @default(now())
+  user          User        @relation(fields: [userId], references: [id], onDelete: Cascade)
+  achievement   Achievement @relation(fields: [achievementId], references: [id], onDelete: Cascade)
+
+  @@id([userId, achievementId])
+}
+
+model Note {
+  id         String    @id @default(cuid())
+  userId     String
+  activityId String?
+  body       String
+  createdAt  DateTime  @default(now())
+  updatedAt  DateTime  @updatedAt
+  user       User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+  activity   Activity? @relation(fields: [activityId], references: [id], onDelete: SetNull)
+
+  @@index([userId, updatedAt])
+}
+
+model Bookmark {
+  userId     String
+  activityId String
+  createdAt  DateTime @default(now())
+  user       User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  activity   Activity @relation(fields: [activityId], references: [id], onDelete: Cascade)
+
+  @@id([userId, activityId])
+}
+
+model SavedTopology {
+  id        String   @id @default(cuid())
+  userId    String
+  name      String
+  data      Json
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId, updatedAt])
+}
+
+model Notification {
+  id        String    @id @default(cuid())
+  userId    String
+  type      String
+  title     String
+  body      String
+  readAt    DateTime?
+  createdAt DateTime  @default(now())
+  user      User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId, readAt])
+}
+
+model AuditLog {
+  id        String   @id @default(cuid())
+  actorId   String?
+  action    String
+  entity    String
+  entityId  String?
+  meta      Json?
+  createdAt DateTime @default(now())
+  actor     User?    @relation(fields: [actorId], references: [id], onDelete: SetNull)
+
+  @@index([entity, entityId])
+  @@index([createdAt])
+}

@@ -1,0 +1,17 @@
+# Full stack: docker compose -f docker-compose.yml -f docker-compose.prod.yml up --build
+services:
+  api:
+    build: { context: ., dockerfile: apps/api/Dockerfile }
+    environment:
+      DATABASE_URL: postgresql://netforge:netforge@db:5432/netforge?schema=public
+      APP_ORIGINS: ${APP_ORIGINS:-http://localhost:3000}
+      NODE_ENV: production
+    depends_on:
+      db: { condition: service_healthy }
+  web:
+    build: { context: ., dockerfile: apps/web/Dockerfile, args: { API_URL: http://api:4000 } }
+    environment:
+      API_URL: http://api:4000
+      NEXT_PUBLIC_SITE_URL: ${SITE_URL:-http://localhost:3000}
+    ports: ["3000:3000"]
+    depends_on: [api]

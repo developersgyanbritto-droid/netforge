@@ -1,0 +1,387 @@
+import type { ModuleDef } from '../schema';
+import { challenge, check, info, lab, lesson, multi, quiz, realWorld, single, steps, table, term, text, textQ, tip, topo, warn } from '../helpers';
+import { smallLan, twoLans } from '../topologies';
+
+const fourPcLan = {
+  devices: [
+    { id: 'pc1', kind: 'pc' as const, x: 40, y: 280, ip: '192.168.1.10/24' },
+    { id: 'pc2', kind: 'pc' as const, x: 200, y: 280, ip: '192.168.1.11/24' },
+    { id: 'pc3', kind: 'pc' as const, x: 360, y: 280, ip: '192.168.1.12/24' },
+    { id: 'pc4', kind: 'pc' as const, x: 520, y: 280, ip: '192.168.1.13/24' },
+    { id: 'sw1', kind: 'switch' as const, x: 280, y: 110 },
+  ],
+  links: [
+    ['pc1', 'Fa0', 'sw1', 'Fa0/1'],
+    ['pc2', 'Fa0', 'sw1', 'Fa0/2'],
+    ['pc3', 'Fa0', 'sw1', 'Fa0/3'],
+    ['pc4', 'Fa0', 'sw1', 'Fa0/4'],
+  ] as [string, string, string, string][],
+};
+
+export const switching: ModuleDef = {
+  slug: 'ethernet-switching',
+  track: 'core',
+  title: 'Ethernet & Switching',
+  summary: 'Frames, MAC learning, flooding, broadcast domains and ARP — watched live inside a switch.',
+  level: 3,
+  prerequisites: ['osi-tcpip'],
+  activities: [
+    lesson('ethernet-frames', 'Inside an Ethernet frame', 'The fields every switch reads.', 7, ['ethernet-switching', 'mac-addressing'],
+      ['Identify the fields of an Ethernet frame'],
+      [
+        table(['Field', 'Size', 'Purpose'], [
+          ['Preamble + SFD', '8 bytes', 'Synchronises the receiver'],
+          ['Destination MAC', '6 bytes', 'Who the frame is for (read first so switches can decide quickly)'],
+          ['Source MAC', '6 bytes', 'Who sent it — switches learn from this'],
+          ['EtherType', '2 bytes', 'What is inside: 0x0800 IPv4, 0x0806 ARP, 0x86DD IPv6'],
+          ['Payload', '46–1500 bytes', 'The packet (MTU 1500)'],
+          ['FCS', '4 bytes', 'Checksum to detect corrupted frames'],
+        ], 'Ethernet II frame'),
+        info('An 802.1Q VLAN tag (4 bytes) can be inserted after the source MAC on trunk links — you will meet it in the VLAN module.'),
+        check('Which field does a switch use to LEARN where a device is?', ['Destination MAC', 'Source MAC', 'EtherType', 'FCS'], 1, 'The switch records the source MAC against the port the frame arrived on.'),
+      ]),
+    lesson('how-switches-learn', 'How a switch learns', 'Watch the MAC address table fill up.', 10, ['ethernet-switching'],
+      ['Explain MAC learning, flooding and forwarding', 'Read a MAC address table'],
+      [
+        steps([
+          ['Learn', 'A frame arrives: the switch stores *source MAC → incoming port* in its MAC address table (also called the CAM table).'],
+          ['Look up', 'It searches the table for the destination MAC.'],
+          ['Forward or flood', 'Known destination → send out that one port. Unknown or broadcast → **flood** out every port except the one it came in on.'],
+          ['Filter', 'If the destination is on the same port it arrived on, the frame is dropped.'],
+        ], 'Switch logic for every frame'),
+        topo(fourPcLan, 'Clear your mind: the switch starts with an empty MAC table. Run the pings one at a time and open the switch\'s MAC table after each. Notice that the first frames are flooded and later ones are forwarded to one port only.', [
+          { label: 'PC1 → PC2', from: 'pc1', to: '192.168.1.11' },
+          { label: 'PC3 → PC1', from: 'pc3', to: '192.168.1.10' },
+          { label: 'PC4 → PC2', from: 'pc4', to: '192.168.1.11' },
+        ], 'Live MAC learning'),
+        check('A switch receives a frame for a MAC that is not in its table. What does it do?', ['Drops it', 'Sends it back to the sender', 'Floods it out all other ports in the VLAN', 'Asks the router'], 2, 'Unknown unicast frames are flooded; the reply will teach the switch where that MAC is.'),
+      ], 2),
+    lesson('unicast-broadcast-multicast', 'Unicast, broadcast and multicast', 'One, all, or a group.', 6, ['ethernet-switching'],
+      ['Distinguish the three delivery types'],
+      [
+        table(['Type', 'Destination', 'MAC example', 'Example use'], [
+          ['Unicast', 'One device', '0060.5c00.0002', 'Ping, web traffic'],
+          ['Broadcast', 'Every device in the broadcast domain', 'ffff.ffff.ffff', 'ARP requests, DHCP discover'],
+          ['Multicast', 'Devices that joined a group', '0100.5exx.xxxx', 'Video streaming, routing protocols'],
+        ]),
+        warn('Too many broadcasts waste bandwidth and CPU on every host. That is one reason large flat networks are split into smaller ones.'),
+        check('An ARP request is sent as…', ['Unicast', 'Broadcast', 'Multicast', 'Anycast'], 1, 'The sender does not know the MAC yet, so it asks everyone with ffff.ffff.ffff.'),
+      ]),
+    lesson('collision-broadcast-domains', 'Collision and broadcast domains', 'Which devices hear each other?', 8, ['ethernet-switching', 'devices'],
+      ['Define collision and broadcast domains', 'Count domains in a topology'],
+      [
+        term('Collision domain', 'A segment where simultaneous transmissions could collide. Every switch port (full-duplex) is its own collision domain; old hubs shared one.'),
+        term('Broadcast domain', 'The set of devices that receive each other\'s broadcasts. A switch (one VLAN) forms one broadcast domain; routers separate broadcast domains.'),
+        table(['Device', 'Separates collision domains?', 'Separates broadcast domains?'], [
+          ['Hub', 'No', 'No'],
+          ['Switch', 'Yes (each port)', 'No (unless VLANs)'],
+          ['Router', 'Yes', 'Yes (each interface)'],
+        ]),
+        topo(twoLans(), 'Ping a non-existent address in the left LAN (192.168.1.99). The ARP broadcast reaches every host on the left, but never crosses the router into the right LAN.', [{ label: 'PC1 → 192.168.1.99 (nobody)', from: 'pc1', to: '192.168.1.99' }]),
+        check('How many broadcast domains are in this topology (two switches, one router between them, no VLANs)?', ['1', '2', '3', '4'], 1, 'Each router interface is a separate broadcast domain: left LAN and right LAN.'),
+      ], 2),
+    lesson('arp-explained', 'ARP: finding the MAC address', 'The bridge between Layer 3 and Layer 2.', 9, ['arp'],
+      ['Explain why ARP is needed', 'Trace an ARP request and reply'],
+      [
+        term('ARP', 'A protocol used to discover the MAC address associated with an IPv4 address on the local network.', 'Address Resolution Protocol'),
+        steps([
+          ['Check the cache', 'PC1 wants to send to 192.168.1.11 and checks its ARP cache. Nothing there.'],
+          ['Broadcast a request', '"Who has 192.168.1.11? Tell 192.168.1.10" — sent to ffff.ffff.ffff.'],
+          ['Owner replies', 'Only the owner of 192.168.1.11 answers, by unicast: "192.168.1.11 is at 0060.5c00.0002".'],
+          ['Cache and send', 'PC1 stores the mapping and sends the waiting packet.'],
+        ]),
+        topo(smallLan, 'Run the ping, then open PC1\'s ARP table (or type "arp -a" in its terminal). Run it again: no ARP the second time.', [{ label: 'PC1 → Server', from: 'pc1', to: '192.168.1.100' }]),
+        info('For destinations in **another** network, a host ARPs for its **default gateway**, not the final destination.'),
+        check('PC1 (192.168.1.10/24) sends to 8.8.8.8 via gateway 192.168.1.1. Whose MAC does it ARP for?', ['8.8.8.8', '192.168.1.1', 'Its own', 'The switch'], 1, 'Off-network traffic is framed to the gateway\'s MAC.'),
+      ], 2),
+    lab('switch-expansion-lab', 'Expand the office LAN', 'Add a device to a switch and verify full connectivity.', 15, ['ethernet-switching', 'ipv4-addressing'], {
+      scenario: 'The design team bought a new laptop. Add it to the existing office switch and make sure every device can reach every other device.',
+      objective: 'Five hosts on one switch, all able to communicate.',
+      spec: fourPcLan,
+      tasks: [
+        { id: 'add', title: 'Add a laptop to the topology', description: 'Use the device palette to add a Laptop.', checks: [{ type: 'deviceCount', kind: 'laptop', min: 1 }] },
+        { id: 'net', title: 'Cable and address the laptop', description: 'Connect it to the switch and give it an unused address in 192.168.1.0/24.', checks: [{ type: 'noErrors', label: 'No addressing conflicts' }, { type: 'pingMatrix', label: 'Every host can reach every other host' }] },
+      ],
+      hints: ['Drag "Laptop" from the palette onto the canvas, then use Connect to cable it to the switch.', 'PCs use .10–.13. Pick something like 192.168.1.20/24.'],
+      concepts: ['MAC learning', 'Flooding', 'Unique addressing'],
+      debrief: 'Every new host only needed a cable and a unique address. The switch learned its MAC automatically — no switch configuration was required.',
+      allowTopologyChanges: true,
+    }, 1),
+    challenge('duplicate-ip-challenge', 'Troubleshoot: intermittent connectivity', 'Two users report that "the network keeps dropping".', 12, ['arp', 'troubleshooting', 'ipv4-addressing'], {
+      scenario: '"Sometimes I can reach the server, sometimes my colleague can, but never both at once!" Two employees on the same switch are complaining. Investigate and fix the problem without changing the server.',
+      objective: 'Every host can reach the server and each other reliably.',
+      spec: {
+        devices: [
+          { id: 'pc1', kind: 'pc', x: 60, y: 280, ip: '192.168.1.10/24' },
+          { id: 'pc2', kind: 'pc', x: 240, y: 280, ip: '192.168.1.11/24' },
+          { id: 'pc3', kind: 'pc', x: 420, y: 280, ip: '192.168.1.11/24' },
+          { id: 'srv1', kind: 'server', x: 560, y: 110, ip: '192.168.1.100/24' },
+          { id: 'sw1', kind: 'switch', x: 260, y: 110 },
+        ],
+        links: [['pc1', 'Fa0', 'sw1', 'Fa0/1'], ['pc2', 'Fa0', 'sw1', 'Fa0/2'], ['pc3', 'Fa0', 'sw1', 'Fa0/3'], ['srv1', 'Fa0', 'sw1', 'Fa0/24']],
+      },
+      tasks: [
+        { id: 'fix', title: 'Find and fix the misconfiguration', checks: [{ type: 'noErrors', label: 'No configuration errors remain' }] },
+        { id: 'verify', title: 'Verify full connectivity', checks: [{ type: 'pingMatrix' }] },
+      ],
+      hints: ['Compare the IP configuration of every PC. Run "ipconfig" in each terminal.', 'Two hosts share one address. ARP replies from both confuse everyone else. Change one of them.'],
+      concepts: ['Duplicate IP addresses', 'ARP conflicts', 'Systematic comparison'],
+      debrief: 'PC2 and PC3 both used 192.168.1.11. When two hosts answer ARP for one IP, other devices cache whichever replied last — traffic goes to the wrong machine. Real operating systems detect this with "gratuitous ARP" and show an address-conflict warning.',
+    }, 2),
+    quiz('arp-quiz', 'ARP & frames drill', 'Short practice on ARP and Ethernet.', ['arp', 'ethernet-switching'], [
+      single('q1', 'What is the destination MAC of an ARP request?', ['0000.0000.0000', 'ffff.ffff.ffff', 'The gateway MAC', 'The target MAC'], 1, 'ARP requests are broadcast.'),
+      single('q2', 'How is the ARP reply sent?', ['Broadcast', 'Unicast to the requester', 'Multicast', 'It is not sent'], 1, 'The owner replies directly to the requester.'),
+      single('q3', 'Which EtherType value indicates IPv4?', ['0x0806', '0x0800', '0x86DD', '0x8100'], 1, '0x0800 = IPv4, 0x0806 = ARP, 0x86DD = IPv6, 0x8100 = 802.1Q tag.'),
+      textQ('q4', 'Which Windows command displays the ARP cache?', ['arp -a', 'arp-a'], '`arp -a` shows cached IP-to-MAC mappings.'),
+    ]),
+    quiz('switching-checkpoint', 'Switching checkpoint', 'MAC learning, flooding and domains.', ['ethernet-switching', 'arp', 'mac-addressing'], [
+      single('q1', 'A switch learns MAC addresses from the…', ['Destination MAC of frames', 'Source MAC of frames', 'IP header', 'Routing table'], 1, 'Learning uses the source MAC and the ingress port.'),
+      single('q2', 'What does a switch do with a broadcast frame?', ['Drops it', 'Forwards to the router only', 'Floods it out all ports in the VLAN except the incoming one', 'Sends it back'], 2, 'Broadcasts are flooded within the broadcast domain.'),
+      single('q3', 'Which device separates broadcast domains?', ['Hub', 'Switch (single VLAN)', 'Router', 'Repeater'], 2, 'Routers do not forward broadcasts between interfaces.'),
+      multi('q4', 'Which statements are true about the MAC address table?', ['It maps MAC addresses to ports', 'It is configured manually on every port', 'Entries are learned dynamically', 'It contains IP addresses'], [0, 2], 'The table is learned automatically and maps MAC → port (per VLAN).'),
+      single('q5', 'PC A pings PC B for the first time on the same LAN. What happens first?', ['ICMP echo request', 'ARP request broadcast', 'DNS query', 'TCP handshake'], 1, 'PC A must learn PC B\'s MAC before it can build the frame.'),
+    ], { checkpoint: true }),
+  ],
+};
+
+export const ipv4: ModuleDef = {
+  slug: 'ipv4-addressing',
+  track: 'core',
+  title: 'IPv4 Addressing',
+  summary: 'Binary, masks, CIDR, address types and the default gateway.',
+  level: 4,
+  prerequisites: ['ethernet-switching'],
+  activities: [
+    lesson('ipv4-structure', 'IPv4 address structure', 'Four octets, 32 bits.', 8, ['ipv4-addressing'],
+      ['Convert octets between decimal and binary'],
+      [
+        text('An IPv4 address is 32 bits, written as four 8-bit **octets** in decimal: `192.168.1.10`. Each octet ranges from 0 to 255 because 8 bits can hold 2⁸ = 256 values.'),
+        text('Each bit in an octet has a value: **128 64 32 16 8 4 2 1**. Toggle the bits below and watch the decimal value change.'),
+        { type: 'binary', value: 192 },
+        check('What is 11000000 in decimal?', ['128', '192', '224', '160'], 1, '128 + 64 = 192.'),
+        check('What is 10101000 in decimal?', ['168', '170', '160', '176'], 0, '128 + 32 + 8 = 168.'),
+      ]),
+    lesson('subnet-mask-cidr', 'Subnet masks and CIDR', 'Which part is network, which is host?', 10, ['ipv4-addressing', 'subnetting'],
+      ['Explain what a subnet mask does', 'Convert between mask and prefix length'],
+      [
+        text('The **subnet mask** marks which bits of the address are the network portion (1s) and which are the host portion (0s). **CIDR notation** writes the number of 1-bits after a slash: 255.255.255.0 = **/24**.'),
+        { type: 'subnet-explorer', ip: '192.168.1.10', prefix: 24 },
+        table(['Prefix', 'Mask', 'Usable hosts'], [
+          ['/8', '255.0.0.0', '16,777,214'],
+          ['/16', '255.255.0.0', '65,534'],
+          ['/24', '255.255.255.0', '254'],
+          ['/25', '255.255.255.128', '126'],
+          ['/26', '255.255.255.192', '62'],
+          ['/30', '255.255.255.252', '2'],
+        ]),
+        check('Which prefix length equals 255.255.255.192?', ['/24', '/25', '/26', '/27'], 2, '192 = 11000000 → 24 + 2 = 26 network bits.'),
+      ], 2),
+    lesson('network-host-broadcast', 'Network, broadcast and host addresses', 'The two addresses you can never give to a host.', 9, ['ipv4-addressing', 'subnetting'],
+      ['Find the network and broadcast address of a subnet', 'Calculate the usable host range'],
+      [
+        text('In every subnet (up to /30):\n\n- **Network address** — all host bits 0. Identifies the subnet itself.\n- **Broadcast address** — all host bits 1. Reaches every host in the subnet.\n- **Usable hosts** — everything in between: 2ⁿ − 2, where n = host bits.'),
+        { type: 'subnet-explorer', ip: '10.0.0.77', prefix: 26 },
+        warn('Assigning the network or broadcast address to a host is a classic mistake. The simulator will flag it.'),
+        check('What is the broadcast address of 10.0.0.77/26?', ['10.0.0.63', '10.0.0.127', '10.0.0.255', '10.0.0.64'], 1, '/26 blocks are 64 addresses: 0–63, 64–127. .77 is in 64–127, so broadcast = 10.0.0.127.'),
+      ], 2),
+    lesson('address-types', 'Public, private and special addresses', 'Not every address is routable on the Internet.', 8, ['ipv4-addressing'],
+      ['Recognise private, loopback, APIPA and multicast ranges'],
+      [
+        table(['Range', 'Type', 'Notes'], [
+          ['10.0.0.0/8', 'Private', 'Large organisations'],
+          ['172.16.0.0/12', 'Private', '172.16.0.0 – 172.31.255.255'],
+          ['192.168.0.0/16', 'Private', 'Homes and small offices'],
+          ['127.0.0.0/8', 'Loopback', 'The host itself (127.0.0.1)'],
+          ['169.254.0.0/16', 'APIPA / link-local', 'Self-assigned when DHCP fails'],
+          ['224.0.0.0/4', 'Multicast', 'Group delivery'],
+          ['100.64.0.0/10', 'Shared (CGNAT)', 'Used inside service providers'],
+          ['Everything else (mostly)', 'Public', 'Globally unique, routable on the Internet'],
+        ], 'Key IPv4 address ranges (RFC 1918, RFC 3927, RFC 6598)'),
+        realWorld('If a PC shows an address like 169.254.23.7, it could not reach a DHCP server. That is a powerful troubleshooting clue.'),
+        info('Private addresses are not routed on the Internet. Routers use **NAT** to translate them to public addresses — covered in the Network Services module.'),
+        check('Which address is private?', ['172.32.10.5', '172.20.10.5', '11.0.0.1', '192.169.1.1'], 1, '172.16.0.0/12 covers 172.16.x.x through 172.31.x.x, so 172.20.10.5 is private.'),
+      ]),
+    lesson('default-gateway', 'The default gateway', 'How hosts leave their own network.', 9, ['ipv4-addressing', 'routing-concepts'],
+      ['Explain the role of the default gateway', 'Predict whether a host sends traffic directly or to the gateway'],
+      [
+        text('Before sending, a host asks: **"Is the destination in my network?"** It compares the destination with its own address and mask.\n\n- **Yes** → ARP for the destination and send directly.\n- **No** → send to the **default gateway** (a router interface in the host\'s own network).'),
+        topo(twoLans(), 'Run both pings and read PC1\'s decision in the event log: "deliver directly" vs "send to my default gateway".', [
+          { label: 'PC1 → PC2 (same network)', from: 'pc1', to: '192.168.1.11' },
+          { label: 'PC1 → PC3 (other network)', from: 'pc1', to: '192.168.2.10' },
+        ]),
+        warn('The gateway must be inside the host\'s own subnet. A host at 192.168.10.10/24 cannot use 192.168.20.1 as its gateway — it would have no way to reach it.'),
+        check('Host 192.168.5.20/24 sends to 192.168.5.200. Does it use its gateway?', ['Yes', 'No'], 1, 'Both are in 192.168.5.0/24 — the host delivers directly.'),
+      ], 2),
+    lab('ipv4-host-config-lab', 'Configure hosts in two networks', 'Address four hosts so they can reach each other through a router.', 15, ['ipv4-addressing', 'routing-concepts'], {
+      scenario: 'The router is ready: Gi0/0 = 192.168.1.1/24 (left LAN), Gi0/1 = 192.168.2.1/24 (right LAN). The hosts have just been installed with no IP settings.',
+      objective: 'All four hosts are correctly addressed and can reach each other across the router.',
+      spec: twoLans({ hostIps: false }),
+      tasks: [
+        { id: 'left', title: 'Address the left LAN hosts', description: 'PC1 and PC2 belong to 192.168.1.0/24.', checks: [{ type: 'hostConfig', device: 'pc1', network: '192.168.1.0/24', gateway: '192.168.1.1' }, { type: 'hostConfig', device: 'pc2', network: '192.168.1.0/24', gateway: '192.168.1.1' }] },
+        { id: 'right', title: 'Address the right LAN hosts', description: 'PC3 and the server belong to 192.168.2.0/24.', checks: [{ type: 'hostConfig', device: 'pc3', network: '192.168.2.0/24', gateway: '192.168.2.1' }, { type: 'hostConfig', device: 'srv1', network: '192.168.2.0/24', gateway: '192.168.2.1' }] },
+        { id: 'verify', title: 'Verify end-to-end connectivity', checks: [{ type: 'noErrors' }, { type: 'pingMatrix' }] },
+      ],
+      hints: ['Each host needs an IP, a mask (/24 = 255.255.255.0) and the router address of ITS OWN LAN as gateway.', 'Don\'t reuse the router\'s .1 address.', 'Example: PC1 192.168.1.10 gw 192.168.1.1; PC3 192.168.2.10 gw 192.168.2.1.'],
+      concepts: ['Host addressing', 'Default gateway', 'Routing between subnets'],
+      debrief: 'Every host needs three settings to talk beyond its own network: address, mask and gateway. Pings across the router show TTL decreasing by one at the router.',
+    }, 2),
+    challenge('wrong-gateway-challenge', 'Troubleshoot: "I can reach my colleague but not the server"', 'A host can talk locally but not remotely.', 12, ['ipv4-addressing', 'troubleshooting'], {
+      scenario: 'PC1 can ping PC2 next to it, but cannot reach the server in the other network. Everyone else is fine. Find the cause.',
+      objective: 'PC1 reaches the server.',
+      spec: (() => {
+        const s = twoLans();
+        s.devices = s.devices.map((d) => (d.id === 'pc1' ? { ...d, gateway: '192.168.20.1' } : d));
+        return s;
+      })(),
+      tasks: [{ id: 'fix', title: 'PC1 can reach the server', checks: [{ type: 'ping', from: 'pc1', to: 'srv1' }, { type: 'noErrors' }] }],
+      hints: ['Local traffic works, remote traffic does not. Which setting is only used for remote traffic?', 'Compare PC1\'s gateway with PC2\'s.'],
+      concepts: ['Default gateway', 'Same-subnet rule'],
+      debrief: 'PC1 belongs to 192.168.1.0/24 but its gateway (192.168.20.1) belongs to 192.168.20.0/24. A host can only reach a gateway on its own subnet, so all remote traffic failed while local traffic worked.',
+    }, 2),
+    quiz('address-types-quiz', 'Address types drill', 'Spot private, public and special addresses.', ['ipv4-addressing'], [
+      single('q1', '169.254.10.20 on a PC usually means…', ['It has a public IP', 'It could not reach a DHCP server', 'It is a router', 'It is a multicast group'], 1, 'APIPA addresses are self-assigned when DHCP fails.'),
+      multi('q2', 'Which are private addresses?', ['10.200.1.1', '172.15.0.1', '192.168.100.1', '172.31.255.1'], [0, 2, 3], '172.15.x.x is outside 172.16.0.0/12.'),
+      textQ('q3', 'What is the IPv4 loopback address most commonly used?', ['127.0.0.1'], '127.0.0.1 (anything in 127.0.0.0/8 is loopback).'),
+      single('q4', 'Which technology lets many private hosts share one public address?', ['ARP', 'NAT/PAT', 'DNS', 'VLAN'], 1, 'Port Address Translation maps many inside hosts to one public IP.'),
+    ]),
+    quiz('ipv4-checkpoint', 'IPv4 checkpoint', 'Masks, ranges and gateways.', ['ipv4-addressing', 'subnetting'], [
+      textQ('q1', 'Write /27 as a dotted-decimal mask.', ['255.255.255.224'], '27 bits: 255.255.255.11100000 = 255.255.255.224.'),
+      textQ('q2', 'What is the network address of 192.168.10.130/25?', ['192.168.10.128'], '/25 splits the last octet into 0–127 and 128–255.'),
+      textQ('q3', 'How many usable hosts does a /28 provide?', ['14'], '2⁴ − 2 = 14.'),
+      single('q4', 'A host is 10.1.1.50/24 with gateway 10.1.2.1. What is wrong?', ['Nothing', 'The gateway is outside the host\'s subnet', 'The mask is invalid', '10.x addresses cannot have gateways'], 1, '10.1.2.1 is in 10.1.2.0/24, not the host\'s 10.1.1.0/24.'),
+      single('q5', 'Which address can be assigned to a host in 172.16.4.0/22?', ['172.16.4.0', '172.16.7.255', '172.16.6.0', '172.16.8.1'], 2, '172.16.4.0/22 spans 172.16.4.0–172.16.7.255. 172.16.6.0 is a valid host in the middle of the range.'),
+    ], { checkpoint: true }),
+  ],
+};
+
+export const subnetting: ModuleDef = {
+  slug: 'subnetting',
+  track: 'core',
+  title: 'Subnetting',
+  summary: 'Split networks with confidence: block sizes, borrowing bits, VLSM and timed practice.',
+  level: 5,
+  prerequisites: ['ipv4-addressing'],
+  activities: [
+    lesson('why-subnet', 'Why subnet?', 'Smaller broadcast domains, better security and efficient addressing.', 6, ['subnetting'],
+      ['List the reasons for subnetting'],
+      [
+        text('One giant /16 network with 65,000 hosts would drown in broadcasts and give every device direct access to every other device. **Subnetting** divides an address block into smaller networks.'),
+        table(['Reason', 'Effect'], [
+          ['Performance', 'Smaller broadcast domains'],
+          ['Security', 'Traffic between subnets passes a router/firewall where it can be filtered'],
+          ['Organisation', 'One subnet per department, floor, or function'],
+          ['Efficiency', 'Allocate only as many addresses as each segment needs'],
+        ]),
+        realWorld('A typical office gives Staff, Guests, Servers, Printers and Management their own subnets (and VLANs).'),
+        check('Subnetting a network into smaller networks mainly reduces the size of…', ['Collision domains', 'Broadcast domains', 'MAC addresses', 'Packets'], 1, 'Each subnet is its own broadcast domain.'),
+      ]),
+    lesson('block-size-method', 'The block-size method', 'Subnet in your head in three steps.', 12, ['subnetting'],
+      ['Find network and broadcast addresses using block size'],
+      [
+        steps([
+          ['Find the interesting octet', 'The octet where the mask is neither 255 nor 0. For /20 (255.255.240.0) it is the 3rd octet.'],
+          ['Block size = 256 − mask value', '256 − 240 = **16**. Subnets start at multiples of 16 in that octet: 0, 16, 32, 48…'],
+          ['Locate the address', 'For 172.16.45.200/20: 45 falls in the 32–47 block. Network = 172.16.32.0, broadcast = 172.16.47.255.'],
+        ], 'Block-size method'),
+        { type: 'subnet-explorer', ip: '172.16.45.200', prefix: 20 },
+        tip('Memorise the mask values: 128, 192, 224, 240, 248, 252, 254, 255 — and their block sizes: 128, 64, 32, 16, 8, 4, 2, 1.'),
+        check('What is the network address of 10.20.99.5/21?', ['10.20.96.0', '10.20.98.0', '10.20.99.0', '10.20.88.0'], 0, '/21 → mask 248 in the 3rd octet, block size 8. 99 falls in 96–103.'),
+      ], 3),
+    lesson('borrowing-bits', 'Borrowing bits', 'Trading hosts for subnets.', 10, ['subnetting'],
+      ['Calculate the number of subnets and hosts when borrowing bits'],
+      [
+        text('Starting from 192.168.1.0/24, each bit you **borrow** from the host portion doubles the number of subnets and roughly halves the hosts per subnet.'),
+        table(['Borrowed bits', 'Prefix', 'Subnets', 'Hosts per subnet', 'Block size'], [
+          ['1', '/25', '2', '126', '128'],
+          ['2', '/26', '4', '62', '64'],
+          ['3', '/27', '8', '30', '32'],
+          ['4', '/28', '16', '14', '16'],
+          ['5', '/29', '32', '6', '8'],
+          ['6', '/30', '64', '2', '4'],
+        ]),
+        text('Formulas: **subnets = 2ᵇ** (b = borrowed bits), **hosts = 2ʰ − 2** (h = remaining host bits).'),
+        check('You need 6 subnets from a /24. How many bits must you borrow?', ['2', '3', '4', '6'], 1, '2² = 4 is too few; 2³ = 8 ≥ 6. Borrow 3 bits → /27.'),
+      ], 3),
+    lesson('vlsm-design', 'VLSM: right-sizing each subnet', 'Different sizes for different needs.', 12, ['vlsm', 'subnetting'],
+      ['Allocate subnets of different sizes without overlap'],
+      [
+        text('**Variable Length Subnet Masking** lets each subnet use a different prefix. Always allocate the **largest** requirement first, then work down — this keeps every block aligned.'),
+        table(['Segment', 'Hosts needed', 'Prefix', 'Network', 'Usable range', 'Broadcast'], [
+          ['Staff', '100', '/25', '192.168.10.0', '.1 – .126', '.127'],
+          ['Guests', '50', '/26', '192.168.10.128', '.129 – .190', '.191'],
+          ['Servers', '20', '/27', '192.168.10.192', '.193 – .222', '.223'],
+          ['Router link', '2', '/30', '192.168.10.224', '.225 – .226', '.227'],
+        ], 'VLSM plan for 192.168.10.0/24'),
+        warn('Allocating small subnets first often leaves the remaining space fragmented so a large subnet no longer fits on a valid boundary.'),
+        check('Which prefix is the smallest subnet that fits 50 hosts?', ['/25', '/26', '/27', '/28'], 1, '/26 = 62 hosts; /27 = 30 is too small.'),
+      ], 3),
+    lesson('subnetting-practice-strategy', 'Practising subnetting effectively', 'How to get fast and accurate.', 6, ['subnetting'],
+      ['Use a repeatable routine to solve subnetting questions'],
+      [
+        steps([
+          ['Write the mask', 'Convert the prefix to the dotted mask.'],
+          ['Find the interesting octet & block size', '256 − mask value.'],
+          ['Find the network', 'The largest multiple of the block size ≤ the address octet.'],
+          ['Broadcast', 'Next network − 1.'],
+          ['Hosts', 'Network + 1 through broadcast − 1.'],
+        ]),
+        tip('Use the subnetting trainer in the sidebar daily for 10 minutes. Speed comes from repetition, not from formulas.'),
+        { type: 'subnet-explorer', ip: '192.168.77.140', prefix: 27 },
+        check('What is the broadcast address of 192.168.77.140/27?', ['192.168.77.159', '192.168.77.143', '192.168.77.191', '192.168.77.127'], 0, 'Block 32: 128–159. Broadcast = .159.'),
+      ], 2),
+    {
+      slug: 'subnetting-sprint-easy', type: 'CHALLENGE', title: 'Subnetting sprint: warm-up', summary: '10 questions, 10 minutes, common prefixes.', estMinutes: 10, difficulty: 2, xp: 80, skills: ['subnetting'],
+      content: { mode: 'subnetting', scenario: 'Warm up with network/broadcast addresses, masks and host counts on common prefixes. Score 80% to pass.', difficulty: 'easy', count: 10, timeLimitSec: 600, passScore: 80 },
+    },
+    {
+      slug: 'subnetting-sprint-hard', type: 'CHALLENGE', title: 'Subnetting sprint: speed run', summary: '10 hard questions in 8 minutes.', estMinutes: 8, difficulty: 4, xp: 140, skills: ['subnetting', 'vlsm'],
+      content: { mode: 'subnetting', scenario: 'Unusual prefixes, host ranges and same-subnet decisions under time pressure. Score 80% to pass.', difficulty: 'hard', count: 10, timeLimitSec: 480, passScore: 80 },
+    },
+    lab('office-addressing-lab', 'Design: address a three-segment office', 'Split 192.168.50.0/24 into /26 subnets and configure everything.', 25, ['subnetting', 'network-design', 'cli'], {
+      kind: 'design',
+      scenario: 'You received 192.168.50.0/24 for a new office with Sales (left switch), Engineering (middle switch) and Servers (right switch). Use /26 subnets in order: Sales = 1st /26, Engineering = 2nd, Servers = 3rd. The router uses the **first usable** address of each subnet. Router interfaces: Gi0/0 → Sales, Gi0/1 → Engineering, Gi0/2 → Servers.',
+      objective: 'All hosts in the three subnets can reach each other through the router.',
+      spec: {
+        devices: [
+          { id: 'r1', kind: 'router', x: 300, y: 30 },
+          { id: 'sw1', kind: 'switch', name: 'SW-Sales', x: 80, y: 160 },
+          { id: 'sw2', kind: 'switch', name: 'SW-Eng', x: 300, y: 160 },
+          { id: 'sw3', kind: 'switch', name: 'SW-Srv', x: 520, y: 160 },
+          { id: 'pc1', kind: 'pc', name: 'Sales-PC', x: 80, y: 300 },
+          { id: 'pc2', kind: 'pc', name: 'Eng-PC', x: 300, y: 300 },
+          { id: 'srv1', kind: 'server', name: 'App-Server', x: 520, y: 300 },
+        ],
+        links: [['r1', 'Gi0/0', 'sw1', 'Gi0/1'], ['r1', 'Gi0/1', 'sw2', 'Gi0/1'], ['r1', 'Gi0/2', 'sw3', 'Gi0/1'], ['pc1', 'Fa0', 'sw1', 'Fa0/1'], ['pc2', 'Fa0', 'sw2', 'Fa0/1'], ['srv1', 'Fa0', 'sw3', 'Fa0/1']],
+      },
+      tasks: [
+        { id: 'router', title: 'Configure and enable the router interfaces', checks: [
+          { type: 'interfaceIp', device: 'r1', iface: 'Gi0/0', ip: '192.168.50.1/26' },
+          { type: 'interfaceIp', device: 'r1', iface: 'Gi0/1', ip: '192.168.50.65/26' },
+          { type: 'interfaceIp', device: 'r1', iface: 'Gi0/2', ip: '192.168.50.129/26' },
+          { type: 'interfaceUp', device: 'r1', iface: 'Gi0/0' }, { type: 'interfaceUp', device: 'r1', iface: 'Gi0/1' }, { type: 'interfaceUp', device: 'r1', iface: 'Gi0/2' },
+        ] },
+        { id: 'hosts', title: 'Address the hosts', checks: [
+          { type: 'hostConfig', device: 'pc1', network: '192.168.50.0/26', gateway: '192.168.50.1' },
+          { type: 'hostConfig', device: 'pc2', network: '192.168.50.64/26', gateway: '192.168.50.65' },
+          { type: 'hostConfig', device: 'srv1', network: '192.168.50.128/26', gateway: '192.168.50.129' },
+        ] },
+        { id: 'verify', title: 'Verify', checks: [{ type: 'pingMatrix' }] },
+      ],
+      hints: [
+        '/26 = 255.255.255.192, block size 64: subnets start at .0, .64, .128, .192.',
+        'Router: open its terminal → enable → configure terminal → interface g0/0 → ip address 192.168.50.1 255.255.255.192 → no shutdown.',
+        'Engineering hosts use 192.168.50.66–.126 with gateway .65; servers .130–.190 with gateway .129.',
+      ],
+      concepts: ['Fixed-length subnetting', 'Router interface addressing', 'no shutdown'],
+      debrief: 'You turned a paper subnet plan into a working network. Every router interface is the gateway of one subnet, and its connected routes let the router forward between all three.',
+    }, 3),
+    quiz('subnetting-checkpoint', 'Subnetting checkpoint', 'Type your answers — no options to guess from.', ['subnetting', 'vlsm'], [
+      textQ('q1', 'Network address of 172.16.45.200/20?', ['172.16.32.0'], 'Block 16 in the 3rd octet: 32–47.'),
+      textQ('q2', 'Broadcast address of 192.168.1.70/27?', ['192.168.1.95'], 'Block 32: 64–95.'),
+      textQ('q3', 'Last usable host in 10.0.0.0/29?', ['10.0.0.6'], '0–7, broadcast .7, last host .6.'),
+      textQ('q4', 'Smallest prefix (longest mask) that fits 500 hosts? (format /nn)', ['/23', '23'], '/23 gives 510 hosts; /24 gives 254.'),
+      textQ('q5', 'How many /28 subnets fit in a /24?', ['16'], '2^(28−24) = 16.'),
+      textQ('q6', 'Mask for /19?', ['255.255.224.0'], '19 = 16 + 3 → third octet 11100000 = 224.'),
+    ], { checkpoint: true, difficulty: 3 }),
+  ],
+};
