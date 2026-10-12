@@ -220,13 +220,14 @@ SLIDES = [
 # ---------- voiceover ----------
 def synth_all():
     import sherpa_onnx
-    d = 'vits-coqui-bn-custom_female'
+    # male voice: Mimic3 Bengali multi-speaker model, speaker 6 (median F0 ~127 Hz)
+    d = 'vits-mimic3-bn-multi_low'
     cfg = sherpa_onnx.OfflineTtsConfig(model=sherpa_onnx.OfflineTtsModelConfig(
-        vits=sherpa_onnx.OfflineTtsVitsModelConfig(model=f'{d}/model.onnx', tokens=f'{d}/tokens.txt'), num_threads=4))
+        vits=sherpa_onnx.OfflineTtsVitsModelConfig(model=f'{d}/bn-multi_low.onnx', tokens=f'{d}/tokens.txt', data_dir=f'{d}/espeak-ng-data'), num_threads=4))
     tts = sherpa_onnx.OfflineTts(cfg)
     clips = []
     for s in SLIDES:
-        a = tts.generate(s['voice'], sid=0, speed=0.95)
+        a = tts.generate(s['voice'], sid=6, speed=0.9)
         clips.append((np.array(a.samples, np.float32), a.sample_rate))
     return clips
 
