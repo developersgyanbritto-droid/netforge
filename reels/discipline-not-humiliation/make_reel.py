@@ -474,31 +474,48 @@ def scene6_base():
     return down(img).convert("RGB"), a["hand"]
 
 
+def cover(img, w, h):
+    sc = max(w / img.width, h / img.height)
+    im = img.resize((math.ceil(img.width * sc), math.ceil(img.height * sc)), Image.LANCZOS)
+    return im.crop(((im.width - w) // 2, (im.height - h) // 2, (im.width - w) // 2 + w, (im.height - h) // 2 + h))
+
+
+def card(img, radius, shadow=True):
+    """Rounded-corner RGBA card with a soft drop shadow (returned with padding)."""
+    pad = 60
+    out = Image.new("RGBA", (img.width + 2 * pad, img.height + 2 * pad))
+    if shadow:
+        sh = Image.new("L", out.size)
+        ImageDraw.Draw(sh).rounded_rectangle([pad, pad + 16, pad + img.width, pad + img.height + 16], radius, fill=150)
+        out.putalpha(sh.filter(ImageFilter.GaussianBlur(24)))
+    mask = Image.new("L", (img.width * K, img.height * K))
+    ImageDraw.Draw(mask).rounded_rectangle([0, 0, img.width * K, img.height * K], radius * K, fill=255)
+    out.paste(img.convert("RGB"), (pad, pad), mask.resize(img.size, Image.LANCZOS))
+    return out
+
+
 @lru_cache(None)
 def founder_base():
-    bg = vgrad(W, H, (24, 34, 58), (58, 40, 64))
     photo = asset("founder.jpg", "founder.jpeg", "founder.png")
-    cx, cy, r = 540, 820, 340
     if photo:
         ph = Image.open(photo).convert("RGB")
-        s = min(ph.size)
-        sq = ph.crop(((ph.width - s) // 2, 0, (ph.width - s) // 2 + s, s)).resize((2 * r, 2 * r), Image.LANCZOS)
-        blur = ph.resize((W, int(ph.height * W / ph.width))).filter(ImageFilter.GaussianBlur(30))
-        bg.paste(blur.convert("RGBA"), (0, (H - blur.height) // 2))
-        bg.alpha_composite(Image.new("RGBA", (W, H), (16, 20, 36, 170)))
-    else:
-        sq = Image.new("RGB", (2 * r, 2 * r))
-        sq.paste(vgrad(2 * r, 2 * r, (92, 104, 132), (54, 62, 86)).convert("RGB"))
-        d = ImageDraw.Draw(sq)
-        d.ellipse([r - 120, r - 190, r + 120, r + 70], fill=(150, 160, 184))
-        d.ellipse([r - 240, r + 110, r + 240, r + 560], fill=(150, 160, 184))
-    bg.alpha_composite(radial(W, H, cx, cy, r + 200, (255, 214, 140), 0.45))
-    mask = Image.new("L", (2 * r * K, 2 * r * K))
-    ImageDraw.Draw(mask).ellipse([0, 0, 2 * r * K, 2 * r * K], fill=255)
-    bg.paste(sq, (cx - r, cy - r), mask.resize((2 * r, 2 * r), Image.LANCZOS))
-    ring = canvas()
-    Pen(ring).e(cx, cy, r + 8, r + 8, None, (236, 196, 120), 10)
-    bg.alpha_composite(down(ring))
+        bg = cover(ph, W, H).filter(ImageFilter.GaussianBlur(36)).convert("RGBA")
+        bg.alpha_composite(Image.new("RGBA", (W, H), (10, 30, 24, 150)))
+        w = 800
+        ph = ph.resize((w, round(ph.height * w / ph.width)), Image.LANCZOS)
+        c = card(ph, 36)
+        bg.alpha_composite(c, ((W - c.width) // 2, 790 - c.height // 2))
+        return bg.convert("RGB")
+    # placeholder when no photo is supplied
+    bg = vgrad(W, H, (24, 34, 58), (58, 40, 64))
+    cx, cy, r = 540, 820, 340
+    sq = Image.new("RGB", (2 * r, 2 * r), (70, 80, 106))
+    d = ImageDraw.Draw(sq)
+    d.ellipse([r - 120, r - 190, r + 120, r + 70], fill=(150, 160, 184))
+    d.ellipse([r - 240, r + 110, r + 240, r + 560], fill=(150, 160, 184))
+    mask = Image.new("L", (2 * r, 2 * r))
+    ImageDraw.Draw(mask).ellipse([0, 0, 2 * r, 2 * r], fill=255)
+    bg.paste(sq, (cx - r, cy - r), mask)
     d = ImageDraw.Draw(bg)
     d.text((540, 1290), "নাসিম ইকবাল", font=font("noto-serif-bengali-700", 84), fill=(255, 255, 255), anchor="mm")
     d.text((540, 1385), "প্রতিষ্ঠাতা, জ্ঞানবৃত্ত", font=font("hind-siliguri-400", 46), fill=(236, 196, 120),
@@ -655,7 +672,72 @@ LOGO_CIRCLES = [("জ্ঞান", (236, 184, 72)), ("নৈতিকতা", (
                 ("দক্ষতা", (232, 110, 90)), ("আত্মনির্ভরতা", (132, 108, 220))]
 
 
+# circle centres / radii inside logo_cycle.png (1254 x 1254), in the order they light up
+CYCLE_SPOTS = [(625, 195, 175), (1010, 590, 175), (625, 980, 175), (245, 590, 175), (627, 612, 205)]
+CYCLE_TIMES = [0.6, 1.9, 3.2, 4.5, 5.8]
+
+
+@lru_cache(None)
+def s8_assets():
+    cyc = Image.open(asset("logo_cycle.png")).convert("RGB")
+    bg = cover(cyc, W, H).filter(ImageFilter.GaussianBlur(30)).convert("RGBA")
+    bg.alpha_composite(Image.new("RGBA", (W, H), (255, 255, 255, 70)))
+    size = 1020
+    cyc = cyc.resize((size, size), Image.LANCZOS)
+    dim = grade(cyc, sat=0.12, bright=0.62)
+    logo = asset("logo.png")
+    lg = None
+    if logo:
+        lg = Image.open(logo).convert("RGB")
+        lg = card(lg.resize((900, round(lg.height * 900 / lg.width)), Image.LANCZOS), 30)
+    return bg.convert("RGB"), cyc, dim, lg
+
+
 def s8(t):
+    if not asset("logo_cycle.png"):
+        return s8_drawn(t)
+    bg, cyc, dim, lg = s8_assets()
+    size = cyc.width
+    sc = size / 1254
+    mask = Image.new("L", (size, size))
+    md = ImageDraw.Draw(mask)
+    glow = Image.new("RGBA", (size, size))
+    gd = ImageDraw.Draw(glow)
+    for (x, y, r), t0 in zip(CYCLE_SPOTS, CYCLE_TIMES):
+        on = ramp(t, t0, t0 + 0.6)
+        if on <= 0:
+            continue
+        x, y, r = x * sc, y * sc, r * sc
+        rr_ = r * (0.6 + 0.4 * on)
+        md.ellipse([x - rr_, y - rr_, x + rr_, y + rr_], fill=int(255 * on))
+        pulse = math.exp(-max(0.0, t - t0) * 2.2)
+        g = r + 30
+        gd.ellipse([x - g, y - g, x + g, y + g], fill=(255, 236, 160, int(220 * pulse * on)))
+    full = ramp(t, 6.6, 7.2)  # finally reveal the ring itself
+    if full > 0:
+        mask = Image.blend(mask, Image.new("L", (size, size), 255), full)
+    mask = mask.filter(ImageFilter.GaussianBlur(4))
+    art = Image.composite(cyc, dim, mask).convert("RGBA")
+    pop = 1.0 + 0.03 * ease(t / 8)
+    art = art.resize((round(size * pop), round(size * pop)), Image.BICUBIC)
+    glow = glow.filter(ImageFilter.GaussianBlur(26)).resize(art.size)
+    frame = bg.convert("RGBA")
+    pos = ((W - art.width) // 2, 1150 - art.height // 2)
+    frame.alpha_composite(glow, pos)
+    a = ramp(t, 0.0, 0.6)
+    edge = Image.new("L", art.size)
+    ImageDraw.Draw(edge).rounded_rectangle([0, 0, art.width, art.height], 40, fill=int(255 * a))
+    art.putalpha(edge)
+    frame.alpha_composite(art, pos)
+    if lg is not None:
+        la = ramp(t, 0.2, 0.9)
+        l2 = lg.copy()
+        l2.putalpha(l2.getchannel("A").point(lambda v: int(v * la)))
+        frame.alpha_composite(l2, ((W - l2.width) // 2, 350 - l2.height // 2 - int(30 * (1 - la))))
+    return fade_black(frame.convert("RGB"), 1 - ramp(t, 7.5, 8.0))
+
+
+def s8_drawn(t):
     img = vgrad(W, H, (12, 22, 40), (22, 18, 40))
     cx, cy, R, r = 540, 960, 290, 132
     logo = asset("logo.png")
