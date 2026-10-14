@@ -500,11 +500,19 @@ def founder_base():
     if photo:
         ph = Image.open(photo).convert("RGB")
         bg = cover(ph, W, H).filter(ImageFilter.GaussianBlur(36)).convert("RGBA")
-        bg.alpha_composite(Image.new("RGBA", (W, H), (10, 30, 24, 150)))
-        w = 800
+        bg.alpha_composite(Image.new("RGBA", (W, H), (8, 26, 30, 175)))
+        w = 980 if ph.width > ph.height else 760
         ph = ph.resize((w, round(ph.height * w / ph.width)), Image.LANCZOS)
         c = card(ph, 36)
-        bg.alpha_composite(c, ((W - c.width) // 2, 790 - c.height // 2))
+        top = 700 - c.height // 2 if ph.width > ph.height else 140
+        bg.alpha_composite(c, ((W - c.width) // 2, top))
+        ny = top + c.height - 60 + 90
+        d = ImageDraw.Draw(bg)
+        d.text((540, ny), "নাসিম ইকবাল", font=font("noto-serif-bengali-700", 88), fill=(255, 255, 255),
+               anchor="mm")
+        d.rounded_rectangle([440, ny + 66, 640, ny + 72], 3, fill=(236, 196, 90))
+        d.text((540, ny + 130), "প্রতিষ্ঠাতা, জ্ঞানবৃত্ত", font=font("hind-siliguri-600", 48),
+               fill=(236, 196, 90), anchor="mm")
         return bg.convert("RGB")
     # placeholder when no photo is supplied
     bg = vgrad(W, H, (24, 34, 58), (58, 40, 64))
@@ -538,6 +546,20 @@ def zoom(img, z, fx=0.5, fy=0.5):
     x0 = min(max(fx * W - w / 2, 0), W - w)
     y0 = min(max(fy * H - h / 2, 0), H - h)
     return img.resize((W, H), Image.BICUBIC, box=(x0, y0, x0 + w, y0 + h))
+
+
+def fade_text(img, lines, f, alpha):
+    """Draw [(xy, text, rgb), ...] centred, at the given opacity (ImageDraw ignores text alpha here)."""
+    if alpha <= 0:
+        return img
+    layer = Image.new("RGBA", img.size)
+    d = ImageDraw.Draw(layer)
+    for xy, text, rgb in lines:
+        d.text(xy, text, font=f, fill=rgb + (255,), anchor="mm")
+    layer.putalpha(layer.getchannel("A").point(lambda v: int(v * alpha)))
+    out = img.convert("RGBA")
+    out.alpha_composite(layer)
+    return out.convert("RGB")
 
 
 def fade_black(img, a):
@@ -672,68 +694,73 @@ LOGO_CIRCLES = [("জ্ঞান", (236, 184, 72)), ("নৈতিকতা", (
                 ("দক্ষতা", (232, 110, 90)), ("আত্মনির্ভরতা", (132, 108, 220))]
 
 
-# circle centres / radii inside logo_cycle.png (1254 x 1254), in the order they light up
-CYCLE_SPOTS = [(625, 195, 175), (1010, 590, 175), (625, 980, 175), (245, 590, 175), (627, 612, 205)]
+# circle centres / radii inside logo_cycle.png (2238 x 2238, transparent), in the order they light up:
+# জ্ঞান, নৈতিকতা, দক্ষতা, আত্মনির্ভরতা, then the centre monogram
+CYCLE_SPOTS = [(1114, 475, 237), (1726, 1060, 237), (1114, 1691, 237), (492, 1060, 237), (1114, 1083, 353)]
 CYCLE_TIMES = [0.6, 1.9, 3.2, 4.5, 5.8]
+CYCLE_SIZE = 980
 
 
 @lru_cache(None)
 def s8_assets():
-    cyc = Image.open(asset("logo_cycle.png")).convert("RGB")
-    bg = cover(cyc, W, H).filter(ImageFilter.GaussianBlur(30)).convert("RGBA")
-    bg.alpha_composite(Image.new("RGBA", (W, H), (255, 255, 255, 70)))
-    size = 1020
-    cyc = cyc.resize((size, size), Image.LANCZOS)
-    dim = grade(cyc, sat=0.12, bright=0.62)
+    src = Image.open(asset("logo_cycle.png")).convert("RGBA")
+    box = src.getchannel("A").getbbox()
+    cyc = src.crop(box)
+    sc = CYCLE_SIZE / cyc.width
+    cyc = cyc.resize((CYCLE_SIZE, round(cyc.height * sc)), Image.LANCZOS)
+    spots = [((x - box[0]) * sc, (y - box[1]) * sc, r * sc) for x, y, r in CYCLE_SPOTS]
+    dim = grade(cyc.convert("RGB"), sat=0.1, bright=0.45).convert("RGBA")
+    dim.putalpha(cyc.getchannel("A"))
+    bg = vgrad(W, H, (8, 32, 38), (10, 16, 28))
+    bg.alpha_composite(radial(W, H, 540, 1050, 900, (30, 110, 110), 0.45))
     logo = asset("logo.png")
     lg = None
     if logo:
         lg = Image.open(logo).convert("RGB")
-        lg = card(lg.resize((900, round(lg.height * 900 / lg.width)), Image.LANCZOS), 30)
-    return bg.convert("RGB"), cyc, dim, lg
+        lg = card(lg.resize((820, round(lg.height * 820 / lg.width)), Image.LANCZOS), 30)
+    return bg.convert("RGB"), cyc, dim, spots, lg
 
 
 def s8(t):
     if not asset("logo_cycle.png"):
         return s8_drawn(t)
-    bg, cyc, dim, lg = s8_assets()
-    size = cyc.width
-    sc = size / 1254
-    mask = Image.new("L", (size, size))
+    bg, cyc, dim, spots, lg = s8_assets()
+    mask = Image.new("L", cyc.size)
     md = ImageDraw.Draw(mask)
-    glow = Image.new("RGBA", (size, size))
+    glow = Image.new("RGBA", cyc.size)
     gd = ImageDraw.Draw(glow)
-    for (x, y, r), t0 in zip(CYCLE_SPOTS, CYCLE_TIMES):
+    for (x, y, r), t0 in zip(spots, CYCLE_TIMES):
         on = ramp(t, t0, t0 + 0.6)
         if on <= 0:
             continue
-        x, y, r = x * sc, y * sc, r * sc
-        rr_ = r * (0.6 + 0.4 * on)
+        rr_ = (r + 6) * (0.6 + 0.4 * on)
         md.ellipse([x - rr_, y - rr_, x + rr_, y + rr_], fill=int(255 * on))
-        pulse = math.exp(-max(0.0, t - t0) * 2.2)
-        g = r + 30
-        gd.ellipse([x - g, y - g, x + g, y + g], fill=(255, 236, 160, int(220 * pulse * on)))
-    full = ramp(t, 6.6, 7.2)  # finally reveal the ring itself
+        pulse = math.exp(-max(0.0, t - t0) * 2.0)
+        g = r + 40
+        gd.ellipse([x - g, y - g, x + g, y + g], fill=(255, 236, 170, int(230 * pulse * on)))
+    full = ramp(t, 6.4, 7.0)  # finally light up the ring itself
     if full > 0:
-        mask = Image.blend(mask, Image.new("L", (size, size), 255), full)
-    mask = mask.filter(ImageFilter.GaussianBlur(4))
-    art = Image.composite(cyc, dim, mask).convert("RGBA")
-    pop = 1.0 + 0.03 * ease(t / 8)
-    art = art.resize((round(size * pop), round(size * pop)), Image.BICUBIC)
-    glow = glow.filter(ImageFilter.GaussianBlur(26)).resize(art.size)
-    frame = bg.convert("RGBA")
-    pos = ((W - art.width) // 2, 1150 - art.height // 2)
-    frame.alpha_composite(glow, pos)
+        mask = Image.blend(mask, Image.new("L", cyc.size, 255), full)
+    mask = mask.filter(ImageFilter.GaussianBlur(3))
+    art = Image.composite(cyc, dim, mask)
     a = ramp(t, 0.0, 0.6)
-    edge = Image.new("L", art.size)
-    ImageDraw.Draw(edge).rounded_rectangle([0, 0, art.width, art.height], 40, fill=int(255 * a))
-    art.putalpha(edge)
+    art.putalpha(art.getchannel("A").point(lambda v: int(v * a)))
+    pop = 0.96 + 0.06 * ease(t / 8)
+    size = (round(art.width * pop), round(art.height * pop))
+    art = art.resize(size, Image.BICUBIC)
+    glow = glow.filter(ImageFilter.GaussianBlur(28)).resize(size)
+    frame = bg.convert("RGBA")
+    pos = ((W - size[0]) // 2, 1060 - size[1] // 2)
+    frame.alpha_composite(glow, pos)
     frame.alpha_composite(art, pos)
     if lg is not None:
         la = ramp(t, 0.2, 0.9)
         l2 = lg.copy()
         l2.putalpha(l2.getchannel("A").point(lambda v: int(v * la)))
-        frame.alpha_composite(l2, ((W - l2.width) // 2, 350 - l2.height // 2 - int(30 * (1 - la))))
+        frame.alpha_composite(l2, ((W - l2.width) // 2, 300 - l2.height // 2 - int(30 * (1 - la))))
+    frame = fade_text(frame, [((540, 1650), "জ্ঞান, নৈতিকতা, দক্ষতা ও", (255, 255, 255)),
+                              ((540, 1730), "আত্মনির্ভরতার পথে", (236, 196, 90))],
+                      font("hind-siliguri-600", 52), ramp(t, 6.2, 7.0))
     return fade_black(frame.convert("RGB"), 1 - ramp(t, 7.5, 8.0))
 
 
@@ -769,22 +796,19 @@ def s8_drawn(t):
         p.text((x, y + 4), name, f, (255, 255, 255, int(110 + 145 * on)))
     img.alpha_composite(glow.filter(ImageFilter.GaussianBlur(40)))
     img.alpha_composite(down(layer))
-    d = ImageDraw.Draw(img)
+    img = img.convert("RGB")
     a = ramp(t, 0.0, 0.8)
     if logo:
         lg = Image.open(logo).convert("RGBA")
         lg.thumbnail((620, 300))
         lg.putalpha(lg.getchannel("A").point(lambda v: int(v * a)))
-        img.alpha_composite(lg, ((W - lg.width) // 2, 400 - lg.height // 2))
+        img.paste(lg, ((W - lg.width) // 2, 400 - lg.height // 2), lg)
     else:
-        d.text((540, 400), "জ্ঞানবৃত্ত", font=font("noto-serif-bengali-700", 130),
-               fill=(255, 255, 255, int(255 * a)), anchor="mm")
-        d.text((540, 505), "GYANBRITTO", font=font("hind-siliguri-600", 40),
-               fill=(236, 196, 120, int(255 * a)), anchor="mm")
-    b = ramp(t, 5.6, 6.4)
-    tf = font("hind-siliguri-600", 50)
-    d.text((540, 1420), "জ্ঞান, নৈতিকতা, দক্ষতা ও", font=tf, fill=(255, 255, 255, int(255 * b)), anchor="mm")
-    d.text((540, 1495), "আত্মনির্ভরতার পথে", font=tf, fill=(255, 255, 255, int(255 * b)), anchor="mm")
+        img = fade_text(img, [((540, 400), "জ্ঞানবৃত্ত", (255, 255, 255))], font("noto-serif-bengali-700", 130), a)
+        img = fade_text(img, [((540, 505), "GYANBRITTO", (236, 196, 120))], font("hind-siliguri-600", 40), a)
+    img = fade_text(img, [((540, 1420), "জ্ঞান, নৈতিকতা, দক্ষতা ও", (255, 255, 255)),
+                          ((540, 1495), "আত্মনির্ভরতার পথে", (255, 255, 255))],
+                    font("hind-siliguri-600", 50), ramp(t, 5.6, 6.4))
     return fade_black(img.convert("RGB"), 1 - ramp(t, 7.5, 8.0))
 
 
