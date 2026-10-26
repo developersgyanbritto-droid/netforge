@@ -22,4 +22,7 @@ The "M" and the shine inside the heart are cream (`#FDFAEE`), or white on the li
 | `miiniilove-latte` | Teal | Orange | Teal | Transparent (light-brown blob and splashes) |
 | `miiniilove-light-brown` | Orange | Teal | Orange | Light brown `#E8CCAD` |
 
+## Horizontal
+`miiniilove-orange-heart-horizontal` is the Orange Heart colourway laid out side by side: the heart icon on the left (with its blobs and splash marks) and the wordmark on the right, vertically centred. Use it for website headers, shop banners, email signatures and other wide spaces.
+
 The PNG previews of the transparent versions are shown on cream. In the SVGs each part is a separate path with an `id` (for example `heart`, `w_M`, `w_i4`, `blob_a`), so colours are easy to change.
