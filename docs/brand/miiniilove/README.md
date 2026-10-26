@@ -5,6 +5,7 @@ Colourful logo for Miiniilove, a kids' brand for toys and clothing.
 | File | Use |
 | --- | --- |
 | `miiniilove-logo.svg` / `.png` | Main logo: icon, name and tagline side by side |
+| `miiniilove-logo-stacked.svg` / `.png` | Stacked logo: icon above the name and tagline, for square or narrow spaces such as shop signs, shopping bags, T-shirt prints and posters |
 | `miiniilove-icon.svg` / `.png` | Icon only, for app icons, social avatars, tags and labels |
 
 All letters are outlined paths, so the SVGs look the same everywhere without needing the font installed.
