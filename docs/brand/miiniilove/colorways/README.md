@@ -25,4 +25,7 @@ The "M" and the shine inside the heart are cream (`#FDFAEE`), or white on the li
 ## Horizontal
 `miiniilove-orange-heart-horizontal` is the Orange Heart colourway laid out side by side: the heart icon on the left (with its blobs and splash marks) and the wordmark on the right, vertically centred. Use it for website headers, shop banners, email signatures and other wide spaces.
 
+## Icon only
+`miiniilove-orange-heart-icon` is just the heart icon from the Orange Heart colourway (heart, blobs and splash marks), with no wordmark. The PNG is 1024 × 1024 with a transparent background, for profile pictures, app icons, favicons, tags and stickers.
+
 The PNG previews of the transparent versions are shown on cream. In the SVGs each part is a separate path with an `id` (for example `heart`, `w_M`, `w_i4`, `blob_a`), so colours are easy to change.
