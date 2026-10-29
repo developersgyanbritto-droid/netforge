@@ -1,0 +1,493 @@
+<title>Miiniilove Brand Guide</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Baloo+Da+2:wght@500;700;800&family=Fredoka:wght@500;600;700&family=Hind+Siliguri:wght@400;500;600&display=swap">
+<style>
+/* Layout: one warm reading column of chapters; logo stages sit on cream "paper" tiles, colour is used the way the brand uses it. */
+:root {
+  --cream: #FDFAEE;      /* base background, also the "M" inside the heart */
+  --sand: #E8CCAD;       /* brand: light brown */
+  --orange: #EC802B;     /* brand: orange */
+  --sun: #EDC55B;        /* brand: yellow */
+  --teal: #66BCB4;       /* brand: teal */
+  --cocoa: #4A3426;      /* support neutral for small text */
+  --cocoa-soft: #7A6252;
+  --line: #EADCC6;
+  --paper: #FFFFFF;
+
+  --display: "Fredoka", "Baloo Da 2", "Nunito", system-ui, sans-serif;
+  --bn-display: "Baloo Da 2", "Fredoka", system-ui, sans-serif;
+  --body: "Hind Siliguri", "Noto Sans Bengali", system-ui, sans-serif;
+
+  --step--1: 0.875rem;
+  --step-0: 1.0625rem;
+  --step-1: 1.3rem;
+  --step-2: 1.75rem;
+  --step-3: clamp(2rem, 4.5vw, 2.75rem);
+  color-scheme: light;
+}
+* { box-sizing: border-box; }
+body {
+  background: var(--cream);
+  color: var(--cocoa);
+  font-family: var(--body);
+  font-size: var(--step-0);
+  line-height: 1.7;
+  padding-left: max(16px, env(safe-area-inset-left, 0px));
+  padding-right: max(16px, env(safe-area-inset-right, 0px));
+}
+.wrap { max-width: 1080px; margin: 0 auto; padding-block: 24px 80px; display: grid; gap: 88px; }
+h1, h2, h3 { font-family: var(--bn-display); color: var(--cocoa); text-wrap: balance; line-height: 1.2; margin: 0; }
+h2 { font-size: var(--step-3); font-weight: 800; }
+h3 { font-size: var(--step-1); font-weight: 700; }
+p { margin: 0; max-width: 65ch; }
+.eyebrow { font-family: var(--display); font-weight: 600; font-size: var(--step--1); letter-spacing: .14em; text-transform: uppercase; color: var(--orange); }
+.lede { font-size: var(--step-1); color: var(--cocoa-soft); }
+.small { font-size: var(--step--1); color: var(--cocoa-soft); }
+section { display: grid; gap: 28px; scroll-margin-top: 24px; }
+.head { display: grid; gap: 10px; }
+code, .mono { font-family: ui-monospace, "SF Mono", Menlo, Consolas, monospace; font-size: .92em; }
+
+/* Cover */
+.cover { display: grid; gap: 32px; justify-items: center; text-align: center; padding-block: 40px 8px; }
+.cover img { width: min(520px, 100%); height: auto; }
+.cover .lede { max-width: 46ch; }
+.toc { display: flex; flex-wrap: wrap; gap: 8px; justify-content: center; padding: 0; margin: 0; list-style: none; }
+.toc a { display: inline-block; padding: 6px 14px; border-radius: 999px; background: var(--paper); border: 1.5px solid var(--line); color: var(--cocoa); text-decoration: none; font-weight: 500; font-size: var(--step--1); }
+.toc a:hover, .toc a:focus-visible { border-color: var(--orange); color: var(--orange); outline: none; }
+
+/* Logo stages */
+.stage { background: var(--paper); border-radius: 22px; display: grid; place-items: center; padding: 40px 24px; border: 1.5px solid var(--line); }
+.stage img { max-width: 100%; height: auto; }
+.logos { display: grid; gap: 20px; grid-template-columns: 1.2fr 1fr; }
+.logos .wide { grid-column: 1 / -1; }
+.logo-card { display: grid; gap: 12px; min-width: 0; }
+.logo-card .stage { min-height: 280px; }
+.logo-card p { font-size: var(--step--1); }
+.logo-card b { font-family: var(--bn-display); font-size: var(--step-0); color: var(--cocoa); }
+
+/* Anatomy */
+.anatomy { display: grid; grid-template-columns: 1fr 1fr; gap: 28px; align-items: center; }
+.parts { list-style: none; margin: 0; padding: 0; display: grid; gap: 14px; }
+.parts li { display: grid; grid-template-columns: 22px 1fr; gap: 12px; align-items: start; }
+.dot { width: 22px; height: 22px; border-radius: 50%; margin-top: 4px; border: 1.5px solid rgba(74,52,38,.12); }
+.parts b { font-family: var(--bn-display); font-weight: 700; }
+
+/* Clear space */
+.rules { display: grid; grid-template-columns: 1.3fr 1fr; gap: 24px; }
+.clear { position: relative; background: var(--paper); border: 1.5px solid var(--line); border-radius: 22px; padding: 40px; display: grid; place-items: center; }
+.clear-box { position: relative; padding: 9%; outline: 2px dashed var(--orange); outline-offset: 0; background:
+  repeating-linear-gradient(45deg, rgba(236,128,43,.09) 0 8px, transparent 8px 16px); width: min(380px, 100%); }
+.clear-box img { display: block; width: 100%; height: auto; background: var(--paper); }
+.x { position: absolute; font-family: var(--display); font-weight: 600; color: var(--orange); font-size: var(--step--1); }
+.x.t { top: 4.5%; left: 50%; transform: translate(-50%, -50%); }
+.x.l { left: 4.5%; top: 50%; transform: translate(-50%, -50%); }
+.sizes { display: grid; gap: 12px; align-content: start; }
+.size { display: grid; grid-template-columns: 96px 1fr; gap: 14px; align-items: center; background: var(--paper); border: 1.5px solid var(--line); border-radius: 16px; padding: 14px 16px; }
+.size img { width: 100%; height: auto; }
+.size .min { font-family: var(--display); font-weight: 600; font-size: var(--step-1); color: var(--cocoa); line-height: 1.2; }
+.size .min span { font-family: var(--body); font-weight: 400; font-size: var(--step--1); color: var(--cocoa-soft); display: block; }
+
+/* Colour */
+.swatches { display: grid; grid-template-columns: repeat(4, 1fr); gap: 16px; }
+.swatch { border-radius: 22px; overflow: hidden; background: var(--paper); border: 1.5px solid var(--line); display: grid; min-width: 0; }
+.chip { aspect-ratio: 4 / 3; padding: 16px; display: flex; align-items: flex-end; font-family: var(--display); font-weight: 600; font-size: var(--step-1); color: var(--cocoa); }
+.swatch dl { margin: 0; padding: 14px 16px 18px; display: grid; grid-template-columns: auto 1fr; gap: 2px 12px; font-size: var(--step--1); }
+.swatch dt { color: var(--cocoa-soft); }
+.swatch dd { margin: 0; font-variant-numeric: tabular-nums; }
+.swatch .use { grid-column: 1 / -1; margin-top: 8px; color: var(--cocoa); line-height: 1.55; }
+.copy { font: inherit; font-family: ui-monospace, Menlo, Consolas, monospace; font-size: .95em; background: none; border: 0; padding: 0; color: var(--cocoa); cursor: pointer; text-align: left; border-bottom: 1px dashed var(--cocoa-soft); }
+.copy:hover, .copy:focus-visible { color: var(--orange); border-color: var(--orange); outline: none; }
+.support { display: grid; grid-template-columns: repeat(2, 1fr); gap: 16px; }
+.support .swatch { grid-template-columns: 110px 1fr; }
+.support .chip { aspect-ratio: auto; min-height: 100%; }
+.ratio { display: flex; height: 64px; border-radius: 16px; overflow: hidden; border: 1.5px solid var(--line); }
+.ratio div { display: flex; align-items: center; justify-content: center; font-family: var(--display); font-weight: 600; font-size: var(--step--1); color: var(--cocoa); min-width: 0; }
+.backs { display: grid; grid-template-columns: repeat(4, 1fr); gap: 16px; }
+.back { display: grid; gap: 10px; min-width: 0; }
+.back .stage { min-height: 200px; padding: 24px; border: 0; }
+.back .stage img { width: 78%; }
+.verdict { font-size: var(--step--1); display: flex; gap: 8px; align-items: baseline; }
+.ok, .no { font-family: var(--display); font-weight: 700; font-size: .8rem; padding: 1px 9px; border-radius: 999px; color: #fff; }
+.ok { background: #3D9A8F; }
+.no { background: #C8541A; }
+
+/* Type */
+.type { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; }
+.face { background: var(--paper); border: 1.5px solid var(--line); border-radius: 22px; padding: 24px; display: grid; gap: 14px; align-content: start; min-width: 0; }
+.face .sample { font-size: 2.6rem; line-height: 1.05; color: var(--cocoa); }
+.face .role { font-size: var(--step--1); color: var(--cocoa-soft); }
+.f-fredoka { font-family: "Fredoka", system-ui, sans-serif; font-weight: 600; }
+.f-baloo { font-family: "Baloo Da 2", system-ui, sans-serif; font-weight: 800; }
+.f-hind { font-family: "Hind Siliguri", system-ui, sans-serif; font-weight: 500; }
+.specimen { background: var(--sand); border-radius: 22px; padding: clamp(24px, 5vw, 48px); display: grid; gap: 14px; }
+.specimen .h { font-family: var(--bn-display); font-weight: 800; font-size: clamp(1.9rem, 5vw, 3.2rem); line-height: 1.15; color: var(--cocoa); }
+.specimen .h em { font-style: normal; color: var(--orange); }
+.specimen .en { font-family: "Fredoka", sans-serif; font-weight: 600; font-size: var(--step-1); color: #2F7F78; }
+.specimen p { color: var(--cocoa); }
+.scale { display: grid; gap: 6px; font-size: var(--step--1); }
+.scale div { display: grid; grid-template-columns: 140px 1fr; gap: 12px; border-top: 1px solid var(--line); padding-top: 6px; }
+
+/* Do & don't */
+.dd { display: grid; grid-template-columns: repeat(4, 1fr); gap: 16px; }
+.dd figure { margin: 0; display: grid; gap: 10px; min-width: 0; }
+.dd .stage { min-height: 180px; padding: 22px; overflow: hidden; }
+.dd .stage img { width: 82%; }
+.dd figcaption { font-size: var(--step--1); line-height: 1.5; }
+.s-stretch img { transform: scaleX(1.45) scaleY(.8); }
+.s-rotate img { transform: rotate(-18deg); }
+.s-recolor img { filter: hue-rotate(150deg) saturate(1.5); }
+.s-shadow img { filter: drop-shadow(6px 8px 0 #4A3426) drop-shadow(0 0 2px #4A3426); }
+.s-busy { background: repeating-linear-gradient(135deg, #EC802B 0 18px, #EDC55B 18px 36px, #66BCB4 36px 54px) !important; }
+.s-yellow { background: var(--sun) !important; }
+.s-crowd { position: relative; }
+.s-crowd span { position: absolute; font-family: var(--display); font-weight: 700; color: var(--teal); font-size: 1.1rem; }
+
+/* Applications */
+.apps { display: grid; grid-template-columns: repeat(4, 1fr); gap: 16px; }
+.app { display: grid; gap: 10px; min-width: 0; }
+.app .stage { min-height: 240px; padding: 20px; background: #F6EEDF; border: 0; }
+.app p { font-size: var(--step--1); }
+.tee { position: relative; width: 190px; max-width: 100%; aspect-ratio: 1 / 1; }
+.tee svg { width: 100%; height: 100%; display: block; }
+.tee img { position: absolute; left: 50%; top: 36%; width: 34%; transform: translateX(-50%); }
+.tag { width: 128px; height: 196px; background: var(--orange); border-radius: 18px 18px 22px 22px; position: relative; display: grid; place-items: center; padding: 36px 14px 14px; box-shadow: 0 10px 24px rgba(74,52,38,.12); transform: rotate(-6deg); }
+.tag::before { content: ""; position: absolute; top: 14px; left: 50%; width: 16px; height: 16px; margin-left: -8px; border-radius: 50%; background: #F6EEDF; }
+.tag img { width: 100%; height: auto; }
+.bag { width: 160px; height: 190px; background: var(--sand); border-radius: 10px 10px 16px 16px; position: relative; display: grid; place-items: center; padding: 22px; margin-top: 30px; box-shadow: 0 10px 24px rgba(74,52,38,.1); }
+.bag::before { content: ""; position: absolute; top: -34px; left: 50%; width: 70px; height: 60px; margin-left: -35px; border: 7px solid var(--orange); border-bottom: 0; border-radius: 40px 40px 0 0; }
+.bag img { width: 100%; height: auto; }
+.avatar { display: grid; gap: 12px; justify-items: center; }
+.avatar .circle { width: 132px; height: 132px; border-radius: 50%; background: var(--orange); display: grid; place-items: center; overflow: hidden; box-shadow: 0 10px 24px rgba(74,52,38,.12); }
+.avatar .circle img { width: 100%; }
+.avatar .name { font-family: var(--display); font-weight: 600; font-size: var(--step--1); }
+
+/* Voice */
+.voice { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; }
+.trait { background: var(--paper); border: 1.5px solid var(--line); border-radius: 22px; padding: 22px; display: grid; gap: 8px; align-content: start; }
+.trait .say { font-family: var(--bn-display); font-weight: 700; font-size: var(--step-1); color: var(--orange); line-height: 1.35; }
+.files { background: var(--paper); border: 1.5px solid var(--line); border-radius: 22px; padding: 22px 24px; display: grid; gap: 8px; }
+.files ul { margin: 0; padding-left: 1.2em; display: grid; gap: 4px; }
+
+footer { text-align: center; display: grid; gap: 14px; justify-items: center; }
+footer img { width: 72px; height: auto; }
+
+@media (max-width: 900px) {
+  .swatches, .backs, .dd, .apps { grid-template-columns: repeat(2, 1fr); }
+  .type, .voice { grid-template-columns: 1fr; }
+  .rules, .anatomy { grid-template-columns: 1fr; }
+}
+@media (max-width: 560px) {
+  .logos { grid-template-columns: 1fr; }
+  .support { grid-template-columns: 1fr; }
+  .dd, .backs { grid-template-columns: 1fr 1fr; gap: 12px; }
+  .apps { grid-template-columns: 1fr; }
+  .ratio div { font-size: .7rem; }
+  .scale div { grid-template-columns: 1fr; gap: 0; }
+}
+@media (max-width: 400px) {
+  .swatches { grid-template-columns: 1fr; }
+}
+@media (prefers-reduced-motion: no-preference) {
+  .toc a, .copy { transition: color .15s, border-color .15s; }
+}
+</style>
+
+<main class="wrap">
+
+  <header class="cover">
+    <span class="eyebrow">Brand Guideline · Orange Heart</span>
+    <img src="assets/miiniilove-stacked.svg" alt="Miiniilove logo: an orange heart with a cream M, yellow and teal blobs behind it, and the word Miiniilove below">
+    <p class="lede">বাচ্চাদের খেলনা আর পোশাকের ব্র্যান্ড Miiniilove-এর লোগো, কালার, ফন্ট আর ব্যবহারের নিয়ম। প্যাকেজিং, ট্যাগ, সোশ্যাল মিডিয়া বা প্রিন্ট, যেখানেই ব্র্যান্ড দেখানো হোক, এই নিয়মগুলো মেনে চললে সব জায়গায় Miiniilove একই রকম দেখাবে।</p>
+    <ul class="toc">
+      <li><a href="#logo">লোগো</a></li>
+      <li><a href="#anatomy">লোগোর গঠন</a></li>
+      <li><a href="#space">জায়গা ও সাইজ</a></li>
+      <li><a href="#color">কালার</a></li>
+      <li><a href="#type">ফন্ট</a></li>
+      <li><a href="#rules">যা করবেন না</a></li>
+      <li><a href="#use">ব্যবহারের উদাহরণ</a></li>
+      <li><a href="#voice">ব্র্যান্ডের ভাষা</a></li>
+    </ul>
+  </header>
+
+  <section id="logo">
+    <div class="head">
+      <span class="eyebrow">Logo</span>
+      <h2>লোগোর তিনটা ভার্সন</h2>
+      <p>মূল লোগো হলো স্ট্যাক করা ভার্সন। জায়গার আকার দেখে বাকি দুটোর মধ্যে একটা বেছে নিন। তিনটাই একই লোগো, শুধু সাজানো আলাদা।</p>
+    </div>
+    <div class="logos">
+      <div class="logo-card">
+        <div class="stage"><img src="assets/miiniilove-stacked.svg" alt="Stacked Miiniilove logo" style="width:78%"></div>
+        <p><b>মূল লোগো (Stacked)</b><br>আইকন উপরে, নাম নিচে। প্যাকেজিং, শপিং ব্যাগ, পোস্টার, দোকানের সাইনবোর্ড আর চারকোনা পোস্টে এটাই প্রথম পছন্দ।</p>
+      </div>
+      <div class="logo-card">
+        <div class="stage"><img src="assets/miiniilove-icon.svg" alt="Miiniilove heart icon" style="width:62%"></div>
+        <p><b>আইকন (Icon)</b><br>শুধু হার্ট। প্রোফাইল ছবি, অ্যাপ আইকন, কাপড়ের লেবেল, স্টিকার আর খুব ছোট জায়গার জন্য।</p>
+      </div>
+      <div class="logo-card wide">
+        <div class="stage" style="min-height:200px"><img src="assets/miiniilove-horizontal.svg" alt="Horizontal Miiniilove logo" style="width:min(720px,100%)"></div>
+        <p><b>পাশাপাশি লোগো (Horizontal)</b><br>আইকন বাঁয়ে, নাম ডানে। ওয়েবসাইটের হেডার, ফেসবুক কভার, ব্যানার আর ইমেইল সিগনেচারের মতো চওড়া কিন্তু নিচু জায়গায়।</p>
+      </div>
+    </div>
+  </section>
+
+  <section id="anatomy">
+    <div class="head">
+      <span class="eyebrow">Anatomy</span>
+      <h2>লোগোর গঠন</h2>
+      <p>লোগোর প্রতিটা অংশের একটা মানে আছে। কোনো অংশ সরানো, বদলানো বা নতুন কিছু যোগ করা যাবে না।</p>
+    </div>
+    <div class="anatomy">
+      <div class="stage" style="min-height:340px"><img src="assets/miiniilove-icon.svg" alt="Miiniilove icon" style="width:min(340px,90%)"></div>
+      <ul class="parts">
+        <li><span class="dot" style="background:var(--orange)"></span><div><b>কমলা হার্ট</b><br>ভালোবাসা আর যত্ন। বাবা-মা সন্তানের জন্য যে ভালোবাসা নিয়ে কেনাকাটা করেন, তার প্রতীক।</div></li>
+        <li><span class="dot" style="background:var(--cream)"></span><div><b>হার্টের ভেতরে "M"</b><br>Miiniilove-এর প্রথম অক্ষর। ফোলা, গোলগাল আকারটা নরম খেলনা আর আরামদায়ক কাপড়ের কথা মনে করায়।</div></li>
+        <li><span class="dot" style="background:var(--sun)"></span><div><b>হলুদ আর টিল ব্লব</b><br>খেলা, রঙ আর আনন্দ। হার্টের পেছনে থাকে, কখনো সামনে আসে না।</div></li>
+        <li><span class="dot" style="background:var(--teal)"></span><div><b>দুই পাশের স্প্ল্যাশ</b><br>বাচ্চাদের উচ্ছ্বাস আর চঞ্চলতা।</div></li>
+        <li><span class="dot" style="background:var(--orange)"></span><div><b>i-এর মাথায় হার্ট, "o"-এর ভেতরে হার্ট</b><br>নামের মধ্যেই ভালোবাসা। চারটা i-এর প্রতিটার মাথায় একটা করে হার্ট থাকবে।</div></li>
+      </ul>
+    </div>
+  </section>
+
+  <section id="space">
+    <div class="head">
+      <span class="eyebrow">Clear space &amp; minimum size</span>
+      <h2>চারপাশে জায়গা আর সবচেয়ে ছোট সাইজ</h2>
+      <p>লোগোর চারপাশে কমপক্ষে <b>2x</b> খালি জায়গা রাখুন। এখানে <b>x</b> হলো "i"-এর মাথার হার্টটার উচ্চতা। এই জায়গার মধ্যে কোনো লেখা, ছবি বা কাগজের কিনারা আসবে না।</p>
+    </div>
+    <div class="rules">
+      <div class="clear">
+        <div class="clear-box">
+          <img src="assets/miiniilove-stacked.svg" alt="Stacked logo with dashed clear-space area around it">
+          <span class="x t">2x</span>
+          <span class="x l">2x</span>
+        </div>
+      </div>
+      <div class="sizes">
+        <div class="size"><img src="assets/miiniilove-stacked.svg" alt=""><div class="min">30 mm · 120 px<span>মূল লোগোর সবচেয়ে কম চওড়া</span></div></div>
+        <div class="size"><img src="assets/miiniilove-horizontal.svg" alt=""><div class="min">45 mm · 180 px<span>পাশাপাশি লোগোর সবচেয়ে কম চওড়া</span></div></div>
+        <div class="size"><img src="assets/miiniilove-icon.svg" alt=""><div class="min">12 mm · 48 px<span>স্প্ল্যাশসহ আইকন</span></div></div>
+        <div class="size"><img src="assets/miiniilove-icon-simple.svg" alt=""><div class="min">6 mm · 16 px<span>এর চেয়ে ছোট জায়গায় স্প্ল্যাশ ছাড়া আইকন ব্যবহার করুন (ফেভিকন, ছোট লেবেল, এমব্রয়ডারি)</span></div></div>
+      </div>
+    </div>
+  </section>
+
+  <section id="color">
+    <div class="head">
+      <span class="eyebrow">Colour</span>
+      <h2>ব্র্যান্ড কালার</h2>
+      <p>Miiniilove-এর চারটা ব্র্যান্ড কালার। লোগো আর ব্র্যান্ডের সব ডিজাইনে শুধু এই চারটা কালারই ব্যবহার হবে। কোডে ক্লিক করলে কপি হবে।</p>
+    </div>
+    <div class="swatches">
+      <div class="swatch">
+        <div class="chip" style="background:var(--orange)">Orange</div>
+        <dl>
+          <dt>HEX</dt><dd><button class="copy" type="button" data-copy="#EC802B">#EC802B</button></dd>
+          <dt>RGB</dt><dd>236 · 128 · 43</dd>
+          <dt>CMYK</dt><dd>0 · 46 · 82 · 7</dd>
+          <dd class="use">প্রধান কালার। হার্ট, "love" লেখা, বোতাম আর সবচেয়ে গুরুত্বপূর্ণ জিনিসে।</dd>
+        </dl>
+      </div>
+      <div class="swatch">
+        <div class="chip" style="background:var(--teal)">Teal</div>
+        <dl>
+          <dt>HEX</dt><dd><button class="copy" type="button" data-copy="#66BCB4">#66BCB4</button></dd>
+          <dt>RGB</dt><dd>102 · 188 · 180</dd>
+          <dt>CMYK</dt><dd>46 · 0 · 4 · 26</dd>
+          <dd class="use">দ্বিতীয় কালার। নামের "M" আর "n", ব্লব, হেডিং আর ব্যাকগ্রাউন্ড ব্লকে।</dd>
+        </dl>
+      </div>
+      <div class="swatch">
+        <div class="chip" style="background:var(--sun)">Yellow</div>
+        <dl>
+          <dt>HEX</dt><dd><button class="copy" type="button" data-copy="#EDC55B">#EDC55B</button></dd>
+          <dt>RGB</dt><dd>237 · 197 · 91</dd>
+          <dt>CMYK</dt><dd>0 · 17 · 62 · 7</dd>
+          <dd class="use">হাইলাইট কালার। অল্প জায়গায়, যেমন ব্লব, স্প্ল্যাশ, স্টিকার আর অফার ব্যাজে।</dd>
+        </dl>
+      </div>
+      <div class="swatch">
+        <div class="chip" style="background:var(--sand)">Light Brown</div>
+        <dl>
+          <dt>HEX</dt><dd><button class="copy" type="button" data-copy="#E8CCAD">#E8CCAD</button></dd>
+          <dt>RGB</dt><dd>232 · 204 · 173</dd>
+          <dt>CMYK</dt><dd>0 · 12 · 25 · 9</dd>
+          <dd class="use">ব্যাকগ্রাউন্ড কালার। প্যাকেজিং, ব্যাগ, কার্ড আর পোস্টের পটভূমিতে। লেখায় নয়।</dd>
+        </dl>
+      </div>
+    </div>
+
+    <div class="head" style="margin-top:12px">
+      <h3>সহায়ক কালার</h3>
+      <p class="small">এই দুটো ব্র্যান্ড কালার নয়, শুধু পটভূমি আর ছোট লেখা পড়ার সুবিধার জন্য। লোগোতে কোকো কালার ব্যবহার হয় না।</p>
+    </div>
+    <div class="support">
+      <div class="swatch">
+        <div class="chip" style="background:var(--cream);border-right:1.5px solid var(--line)"></div>
+        <dl>
+          <dt>Cream</dt><dd><button class="copy" type="button" data-copy="#FDFAEE">#FDFAEE</button></dd>
+          <dd class="use">হালকা পটভূমি, আর হার্টের ভেতরের "M" ও চকচকে দাগ।</dd>
+        </dl>
+      </div>
+      <div class="swatch">
+        <div class="chip" style="background:var(--cocoa)"></div>
+        <dl>
+          <dt>Cocoa</dt><dd><button class="copy" type="button" data-copy="#4A3426">#4A3426</button></dd>
+          <dd class="use">দাম, উপকরণ, সাইজ চার্টের মতো ছোট লেখা, যেখানে ব্র্যান্ড কালারে পড়তে কষ্ট হয়।</dd>
+        </dl>
+      </div>
+    </div>
+
+    <div class="head" style="margin-top:12px">
+      <h3>কোন কালার কতটা</h3>
+      <p class="small">একটা ডিজাইনে মোটামুটি এই অনুপাত রাখুন। হালকা পটভূমি বেশি, হলুদ সবচেয়ে কম।</p>
+    </div>
+    <div class="ratio" role="img" aria-label="Colour proportions: cream 40 percent, light brown 20 percent, orange 20 percent, teal 12 percent, yellow 8 percent">
+      <div style="flex:40;background:var(--cream)">Cream 40%</div>
+      <div style="flex:20;background:var(--sand)">20%</div>
+      <div style="flex:20;background:var(--orange)">20%</div>
+      <div style="flex:12;background:var(--teal)">12%</div>
+      <div style="flex:8;background:var(--sun)">8%</div>
+    </div>
+
+    <div class="head" style="margin-top:12px">
+      <h3>কোন পটভূমিতে কোন লোগো</h3>
+      <p class="small">হালকা পটভূমিতে রঙিন লোগো। কমলা বা টিল পটভূমিতে সাদা এক-কালারের লোগো। এমব্রয়ডারি, স্ক্রিন প্রিন্ট বা স্ট্যাম্পে এক-কালারের লোগো।</p>
+    </div>
+    <div class="backs">
+      <div class="back"><div class="stage" style="background:var(--cream);border:1.5px solid var(--line)"><img src="assets/miiniilove-stacked.svg" alt="Full-colour logo on cream"></div><div class="verdict"><span class="ok">ঠিক</span> ক্রিম পটভূমিতে রঙিন লোগো</div></div>
+      <div class="back"><div class="stage" style="background:var(--sand)"><img src="assets/miiniilove-stacked.svg" alt="Full-colour logo on light brown"></div><div class="verdict"><span class="ok">ঠিক</span> হালকা বাদামিতে রঙিন লোগো</div></div>
+      <div class="back"><div class="stage" style="background:var(--orange)"><img src="assets/miiniilove-stacked-white-on-orange.svg" alt="White logo on orange"></div><div class="verdict"><span class="ok">ঠিক</span> কমলায় সাদা লোগো</div></div>
+      <div class="back"><div class="stage" style="background:var(--teal)"><img src="assets/miiniilove-stacked-white-on-teal.svg" alt="White logo on teal"></div><div class="verdict"><span class="ok">ঠিক</span> টিলে সাদা লোগো</div></div>
+      <div class="back"><div class="stage" style="background:var(--paper);border:1.5px solid var(--line)"><img src="assets/miiniilove-stacked-orange.svg" alt="One-colour orange logo"></div><div class="verdict"><span class="ok">ঠিক</span> এক-কালারের কমলা লোগো</div></div>
+      <div class="back"><div class="stage" style="background:var(--paper);border:1.5px solid var(--line)"><img src="assets/miiniilove-stacked-teal.svg" alt="One-colour teal logo"></div><div class="verdict"><span class="ok">ঠিক</span> এক-কালারের টিল লোগো</div></div>
+      <div class="back"><div class="stage s-yellow"><img src="assets/miiniilove-stacked.svg" alt="Full-colour logo on yellow, not allowed"></div><div class="verdict"><span class="no">ভুল</span> হলুদে রঙিন লোগো: ব্লব আর লেখা মিশে যায়</div></div>
+      <div class="back"><div class="stage" style="background:var(--orange)"><img src="assets/miiniilove-stacked.svg" alt="Full-colour logo on orange, not allowed"></div><div class="verdict"><span class="no">ভুল</span> কমলায় রঙিন লোগো: হার্ট হারিয়ে যায়</div></div>
+    </div>
+  </section>
+
+  <section id="type">
+    <div class="head">
+      <span class="eyebrow">Typography</span>
+      <h2>ফন্ট</h2>
+      <p>লোগোর লেখাটা আলাদা করে আঁকা, তাই কোনো ফন্ট দিয়ে "Miiniilove" টাইপ করে লোগো বানাবেন না। বাকি সব লেখার জন্য এই তিনটা ফ্রি Google Font ব্যবহার করুন।</p>
+    </div>
+    <div class="type">
+      <div class="face"><div class="sample f-fredoka">Aa Toys</div><div><b>Fredoka</b> · SemiBold</div><div class="role">ইংরেজি হেডিং, অফার, প্রোডাক্টের নাম।</div></div>
+      <div class="face"><div class="sample f-baloo">অআ খেলনা</div><div><b>Baloo Da 2</b> · ExtraBold</div><div class="role">বাংলা হেডিং আর বড় লেখা। গোলগাল আকার লোগোর সাথে মেলে।</div></div>
+      <div class="face"><div class="sample f-hind">অআ পোশাক</div><div><b>Hind Siliguri</b> · Regular / Medium</div><div class="role">বাংলা ও ইংরেজি সাধারণ লেখা, প্রোডাক্টের বিবরণ, ছোট লেখা।</div></div>
+    </div>
+    <div class="specimen">
+      <div class="h">ছোট্ট হাসির জন্য <em>বড় ভালোবাসা</em></div>
+      <div class="en">Soft toys and comfy clothes for little ones</div>
+      <p>নরম সুতির জামা আর নিরাপদ খেলনা, যত্ন করে বাছাই করা ০ থেকে ৮ বছরের বাচ্চাদের জন্য। প্রতিটা প্রোডাক্ট বাচ্চাদের ত্বক আর হাতের কথা ভেবে বানানো।</p>
+    </div>
+    <div class="scale">
+      <div><span>বড় হেডিং</span><span>Baloo Da 2 ExtraBold · 40–56 px · লাইন উচ্চতা 1.15</span></div>
+      <div><span>ছোট হেডিং</span><span>Baloo Da 2 Bold · 22–28 px · লাইন উচ্চতা 1.25</span></div>
+      <div><span>ইংরেজি হেডিং</span><span>Fredoka SemiBold · 20–48 px</span></div>
+      <div><span>সাধারণ লেখা</span><span>Hind Siliguri Regular · 16–18 px · লাইন উচ্চতা 1.7</span></div>
+      <div><span>ছোট লেখা / লেবেল</span><span>Hind Siliguri Medium · 12–14 px · Cocoa কালারে</span></div>
+    </div>
+  </section>
+
+  <section id="rules">
+    <div class="head">
+      <span class="eyebrow">Don'ts</span>
+      <h2>লোগো নিয়ে যা করবেন না</h2>
+      <p>লোগো সবসময় দেওয়া ফাইল থেকেই ব্যবহার করুন। নিচের কোনো পরিবর্তন করবেন না।</p>
+    </div>
+    <div class="dd">
+      <figure><div class="stage s-stretch"><img src="assets/miiniilove-stacked.svg" alt="Stretched logo"></div><figcaption><span class="no">ভুল</span> টেনে লম্বা বা চ্যাপ্টা করবেন না। সাইজ বদলালে সবসময় অনুপাত ঠিক রাখুন।</figcaption></figure>
+      <figure><div class="stage s-rotate"><img src="assets/miiniilove-stacked.svg" alt="Rotated logo"></div><figcaption><span class="no">ভুল</span> বাঁকা বা ঘুরিয়ে বসাবেন না।</figcaption></figure>
+      <figure><div class="stage s-recolor"><img src="assets/miiniilove-stacked.svg" alt="Logo in off-brand colours"></div><figcaption><span class="no">ভুল</span> ব্র্যান্ডের চারটা কালারের বাইরে কোনো কালার দেবেন না।</figcaption></figure>
+      <figure><div class="stage s-shadow"><img src="assets/miiniilove-stacked.svg" alt="Logo with a drop shadow"></div><figcaption><span class="no">ভুল</span> শ্যাডো, আউটলাইন, গ্লো বা গ্রেডিয়েন্ট যোগ করবেন না।</figcaption></figure>
+      <figure><div class="stage s-busy"><img src="assets/miiniilove-stacked.svg" alt="Logo on a busy striped background"></div><figcaption><span class="no">ভুল</span> ভিড়ভাট্টা প্যাটার্ন বা ছবির ওপর বসাবেন না। দরকার হলে নিচে ক্রিম বা সাদা প্লেট দিন।</figcaption></figure>
+      <figure><div class="stage s-crowd"><img src="assets/miiniilove-stacked.svg" alt="Logo crowded by text" style="width:70%"><span style="top:8px;left:10px">SALE!</span><span style="bottom:10px;right:12px">৫০% ছাড়</span></div><figcaption><span class="no">ভুল</span> চারপাশের 2x খালি জায়গার মধ্যে লেখা বা ছবি রাখবেন না।</figcaption></figure>
+      <figure><div class="stage"><span style="font-family:var(--display);font-weight:700;font-size:2.2rem;color:var(--orange)">Minilove</span></div><figcaption><span class="no">ভুল</span> বানান বদলাবেন না। সবসময় <b>Miiniilove</b>, দুই জায়গায় "ii"।</figcaption></figure>
+      <figure><div class="stage" style="display:flex;gap:10px;align-items:center;justify-content:center"><span style="font-family:var(--display);font-weight:700;font-size:1.7rem;color:var(--teal)">Miiniilove</span><img src="assets/miiniilove-icon-simple.svg" alt="" style="width:30%"></div><figcaption><span class="no">ভুল</span> অংশগুলো নতুন করে সাজাবেন না বা ফন্ট দিয়ে নাম টাইপ করবেন না।</figcaption></figure>
+    </div>
+  </section>
+
+  <section id="use">
+    <div class="head">
+      <span class="eyebrow">Applications</span>
+      <h2>ব্যবহারের উদাহরণ</h2>
+      <p>খেলনা আর পোশাকে লোগো কীভাবে বসবে তার কয়েকটা উদাহরণ।</p>
+    </div>
+    <div class="apps">
+      <div class="app">
+        <div class="stage">
+          <div class="tee">
+            <svg viewBox="0 0 200 200" aria-hidden="true"><path d="M70 18 Q100 38 130 18 L178 42 L162 82 L144 74 L144 186 L56 186 L56 74 L38 82 L22 42 Z" fill="#66BCB4" stroke="#5AAAA2" stroke-width="2" stroke-linejoin="round"/><path d="M78 22 Q100 40 122 22" fill="none" stroke="#5AAAA2" stroke-width="3"/></svg>
+            <img src="assets/miiniilove-icon-simple.svg" alt="">
+          </div>
+        </div>
+        <p><b>বাচ্চাদের টি-শার্ট</b><br>বুকের বাঁ দিকে বা মাঝখানে ছোট আইকন। এমব্রয়ডারিতে স্প্ল্যাশ ছাড়া আইকন।</p>
+      </div>
+      <div class="app">
+        <div class="stage"><div class="tag"><img src="assets/miiniilove-stacked-white-on-orange.svg" alt=""></div></div>
+        <p><b>কাপড়ের হ্যাং ট্যাগ</b><br>কমলা ট্যাগে সাদা লোগো। পেছনে দাম আর সাইজ Cocoa কালারে।</p>
+      </div>
+      <div class="app">
+        <div class="stage"><div class="bag"><img src="assets/miiniilove-stacked.svg" alt=""></div></div>
+        <p><b>শপিং ব্যাগ ও খেলনার বাক্স</b><br>হালকা বাদামি পটভূমিতে রঙিন মূল লোগো, হাতল কমলা।</p>
+      </div>
+      <div class="app">
+        <div class="stage"><div class="avatar"><div class="circle"><img src="assets/miiniilove-icon-simple-white-on-orange.svg" alt=""></div><span class="name">@miiniilove</span></div></div>
+        <p><b>সোশ্যাল মিডিয়া প্রোফাইল</b><br>গোল ফ্রেমে কমলা পটভূমিতে সাদা আইকন। ছোট সাইজেও পরিষ্কার দেখা যায়।</p>
+      </div>
+    </div>
+  </section>
+
+  <section id="voice">
+    <div class="head">
+      <span class="eyebrow">Voice</span>
+      <h2>ব্র্যান্ডের ভাষা</h2>
+      <p>Miiniilove কথা বলে একজন আদরের খালা বা মামার মতো: উষ্ণ, হাসিখুশি আর সহজ ভাষায়। বাবা-মায়ের সাথে কথা বলে, বাচ্চাদের কথা ভেবে।</p>
+    </div>
+    <div class="voice">
+      <div class="trait"><h3>উষ্ণ</h3><p class="small">যত্ন আর ভালোবাসার কথা আগে, দাম পরে।</p><div class="say">"ছোট্ট হাতের জন্য নরম খেলনা"</div></div>
+      <div class="trait"><h3>হাসিখুশি</h3><p class="small">ছোট বাক্য, খেলার মতো শব্দ। ইমোজি অল্প।</p><div class="say">"নতুন রঙে নতুন খেলা!"</div></div>
+      <div class="trait"><h3>ভরসার</h3><p class="small">কাপড়, বয়স আর নিরাপত্তার তথ্য পরিষ্কার করে বলুন।</p><div class="say">"১০০% সুতি · ২–৩ বছর"</div></div>
+    </div>
+  </section>
+
+  <section>
+    <div class="files">
+      <h3>লোগো ফাইল</h3>
+      <p class="small">সব ফাইল প্রজেক্টের <code>docs/brand/miiniilove/guideline/assets/</code> ফোল্ডারে আছে। SVG ফাইল যেকোনো সাইজে বড় করলেও ঝাপসা হয় না, আর পটভূমি ট্রান্সপারেন্ট।</p>
+      <ul class="small">
+        <li><code>miiniilove-stacked.svg</code>, <code>miiniilove-horizontal.svg</code>, <code>miiniilove-icon.svg</code>: রঙিন মূল লোগো</li>
+        <li><code>miiniilove-icon-simple.svg</code>: স্প্ল্যাশ ছাড়া আইকন, ছোট সাইজের জন্য</li>
+        <li><code>miiniilove-stacked-orange.svg</code>, <code>-teal.svg</code>, <code>miiniilove-horizontal-orange.svg</code>: এক-কালারের লোগো</li>
+        <li><code>miiniilove-stacked-white-on-orange.svg</code>, <code>-white-on-teal.svg</code>, <code>miiniilove-icon-simple-white-on-orange.svg</code>: কমলা বা টিল পটভূমির জন্য সাদা লোগো</li>
+      </ul>
+      <p class="small">CMYK মানগুলো আনুমানিক। প্রিন্টের আগে প্রেস থেকে একটা কালার প্রুফ দেখে নিন।</p>
+    </div>
+  </section>
+
+  <footer>
+    <img src="assets/miiniilove-icon-simple.svg" alt="">
+    <p class="small">Miiniilove Brand Guideline · Orange Heart · ২০২৬</p>
+  </footer>
+</main>
+
+<script>
+document.querySelectorAll('.copy').forEach(function (btn) {
+  btn.addEventListener('click', function () {
+    var v = btn.getAttribute('data-copy');
+    var done = function () { var t = btn.textContent; btn.textContent = 'কপি হয়েছে'; setTimeout(function () { btn.textContent = t; }, 1200); };
+    try {
+      navigator.clipboard.writeText(v).then(done, function () { selectText(btn); });
+    } catch (e) { selectText(btn); }
+  });
+});
+function selectText(el) {
+  var r = document.createRange(); r.selectNodeContents(el);
+  var s = window.getSelection(); s.removeAllRanges(); s.addRange(r);
+}
+</script>
