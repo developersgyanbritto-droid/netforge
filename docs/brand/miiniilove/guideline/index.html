@@ -38,9 +38,9 @@ body {
   padding-right: max(16px, env(safe-area-inset-right, 0px));
 }
 .wrap { max-width: 1080px; margin: 0 auto; padding-block: 24px 80px; display: grid; gap: 88px; }
-h1, h2, h3 { font-family: var(--bn-display); color: var(--cocoa); text-wrap: balance; line-height: 1.2; margin: 0; }
-h2 { font-size: var(--step-3); font-weight: 800; }
-h3 { font-size: var(--step-1); font-weight: 700; }
+h1, h2, h3 { font-family: var(--display); color: var(--cocoa); text-wrap: balance; line-height: 1.2; margin: 0; }
+h2 { font-size: var(--step-3); font-weight: 700; }
+h3 { font-size: var(--step-1); font-weight: 600; }
 p { margin: 0; max-width: 65ch; }
 .eyebrow { font-family: var(--display); font-weight: 600; font-size: var(--step--1); letter-spacing: .14em; text-transform: uppercase; color: var(--orange); }
 .lede { font-size: var(--step-1); color: var(--cocoa-soft); }
@@ -65,14 +65,14 @@ code, .mono { font-family: ui-monospace, "SF Mono", Menlo, Consolas, monospace; 
 .logo-card { display: grid; gap: 12px; min-width: 0; }
 .logo-card .stage { min-height: 280px; }
 .logo-card p { font-size: var(--step--1); }
-.logo-card b { font-family: var(--bn-display); font-size: var(--step-0); color: var(--cocoa); }
+.logo-card b { font-family: var(--display); font-size: var(--step-0); color: var(--cocoa); }
 
 /* Anatomy */
 .anatomy { display: grid; grid-template-columns: 1fr 1fr; gap: 28px; align-items: center; }
 .parts { list-style: none; margin: 0; padding: 0; display: grid; gap: 14px; }
 .parts li { display: grid; grid-template-columns: 22px 1fr; gap: 12px; align-items: start; }
 .dot { width: 22px; height: 22px; border-radius: 50%; margin-top: 4px; border: 1.5px solid rgba(74,52,38,.12); }
-.parts b { font-family: var(--bn-display); font-weight: 700; }
+.parts b { font-family: var(--display); font-weight: 600; }
 
 /* Clear space */
 .rules { display: grid; grid-template-columns: 1.3fr 1fr; gap: 24px; }
@@ -109,7 +109,7 @@ code, .mono { font-family: ui-monospace, "SF Mono", Menlo, Consolas, monospace; 
 .back .stage { min-height: 200px; padding: 24px; border: 0; }
 .back .stage img { width: 78%; }
 .verdict { font-size: var(--step--1); display: flex; gap: 8px; align-items: baseline; }
-.ok, .no { font-family: var(--display); font-weight: 700; font-size: .8rem; padding: 1px 9px; border-radius: 999px; color: #fff; }
+.ok, .no { font-family: var(--display); font-weight: 600; font-size: .8rem; padding: 1px 9px; border-radius: 999px; color: #fff; }
 .ok { background: #3D9A8F; }
 .no { background: #C8541A; }
 
@@ -122,7 +122,7 @@ code, .mono { font-family: ui-monospace, "SF Mono", Menlo, Consolas, monospace; 
 .f-baloo { font-family: "Baloo Da 2", system-ui, sans-serif; font-weight: 800; }
 .f-hind { font-family: "Hind Siliguri", system-ui, sans-serif; font-weight: 500; }
 .specimen { background: var(--sand); border-radius: 22px; padding: clamp(24px, 5vw, 48px); display: grid; gap: 14px; }
-.specimen .h { font-family: var(--bn-display); font-weight: 800; font-size: clamp(1.9rem, 5vw, 3.2rem); line-height: 1.15; color: var(--cocoa); }
+.specimen .h { font-family: var(--display); font-weight: 600; font-size: clamp(1.9rem, 5vw, 3.2rem); line-height: 1.15; color: var(--cocoa); }
 .specimen .h em { font-style: normal; color: var(--orange); }
 .specimen .en { font-family: "Fredoka", sans-serif; font-weight: 600; font-size: var(--step-1); color: #2F7F78; }
 .specimen p { color: var(--cocoa); }
@@ -166,7 +166,7 @@ code, .mono { font-family: ui-monospace, "SF Mono", Menlo, Consolas, monospace; 
 /* Voice */
 .voice { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; }
 .trait { background: var(--paper); border: 1.5px solid var(--line); border-radius: 22px; padding: 22px; display: grid; gap: 8px; align-content: start; }
-.trait .say { font-family: var(--bn-display); font-weight: 700; font-size: var(--step-1); color: var(--orange); line-height: 1.35; }
+.trait .say { font-family: var(--display); font-weight: 600; font-size: var(--step-1); color: var(--orange); line-height: 1.35; }
 .files { background: var(--paper); border: 1.5px solid var(--line); border-radius: 22px; padding: 22px 24px; display: grid; gap: 8px; }
 .files ul { margin: 0; padding-left: 1.2em; display: grid; gap: 4px; }
 
@@ -199,37 +199,37 @@ footer img { width: 72px; height: auto; }
   <header class="cover">
     <span class="eyebrow">Brand Guideline · Orange Heart</span>
     <img src="assets/miiniilove-stacked.svg" alt="Miiniilove logo: an orange heart with a cream M, yellow and teal blobs behind it, and the word Miiniilove below">
-    <p class="lede">বাচ্চাদের খেলনা আর পোশাকের ব্র্যান্ড Miiniilove-এর লোগো, কালার, ফন্ট আর ব্যবহারের নিয়ম। প্যাকেজিং, ট্যাগ, সোশ্যাল মিডিয়া বা প্রিন্ট, যেখানেই ব্র্যান্ড দেখানো হোক, এই নিয়মগুলো মেনে চললে সব জায়গায় Miiniilove একই রকম দেখাবে।</p>
+    <p class="lede">The logo, colours, type and usage rules for Miiniilove, a toys and clothing brand for kids. Follow these rules on packaging, tags, social media and print, and Miiniilove will look the same everywhere.</p>
     <ul class="toc">
-      <li><a href="#logo">লোগো</a></li>
-      <li><a href="#anatomy">লোগোর গঠন</a></li>
-      <li><a href="#space">জায়গা ও সাইজ</a></li>
-      <li><a href="#color">কালার</a></li>
-      <li><a href="#type">ফন্ট</a></li>
-      <li><a href="#rules">যা করবেন না</a></li>
-      <li><a href="#use">ব্যবহারের উদাহরণ</a></li>
-      <li><a href="#voice">ব্র্যান্ডের ভাষা</a></li>
+      <li><a href="#logo">Logo</a></li>
+      <li><a href="#anatomy">Anatomy</a></li>
+      <li><a href="#space">Space &amp; size</a></li>
+      <li><a href="#color">Colour</a></li>
+      <li><a href="#type">Typography</a></li>
+      <li><a href="#rules">Don'ts</a></li>
+      <li><a href="#use">Applications</a></li>
+      <li><a href="#voice">Voice</a></li>
     </ul>
   </header>
 
   <section id="logo">
     <div class="head">
       <span class="eyebrow">Logo</span>
-      <h2>লোগোর তিনটা ভার্সন</h2>
-      <p>মূল লোগো হলো স্ট্যাক করা ভার্সন। জায়গার আকার দেখে বাকি দুটোর মধ্যে একটা বেছে নিন। তিনটাই একই লোগো, শুধু সাজানো আলাদা।</p>
+      <h2>Three versions of the logo</h2>
+      <p>The stacked version is the primary logo. When the space calls for a different shape, use one of the other two. All three are the same logo, arranged differently.</p>
     </div>
     <div class="logos">
       <div class="logo-card">
         <div class="stage"><img src="assets/miiniilove-stacked.svg" alt="Stacked Miiniilove logo" style="width:78%"></div>
-        <p><b>মূল লোগো (Stacked)</b><br>আইকন উপরে, নাম নিচে। প্যাকেজিং, শপিং ব্যাগ, পোস্টার, দোকানের সাইনবোর্ড আর চারকোনা পোস্টে এটাই প্রথম পছন্দ।</p>
+        <p><b>Primary logo (stacked)</b><br>Icon on top, name below. The first choice for packaging, shopping bags, posters, shop signs and square posts.</p>
       </div>
       <div class="logo-card">
         <div class="stage"><img src="assets/miiniilove-icon.svg" alt="Miiniilove heart icon" style="width:62%"></div>
-        <p><b>আইকন (Icon)</b><br>শুধু হার্ট। প্রোফাইল ছবি, অ্যাপ আইকন, কাপড়ের লেবেল, স্টিকার আর খুব ছোট জায়গার জন্য।</p>
+        <p><b>Icon</b><br>The heart on its own. For profile pictures, app icons, clothing labels, stickers and very small spaces.</p>
       </div>
       <div class="logo-card wide">
         <div class="stage" style="min-height:200px"><img src="assets/miiniilove-horizontal.svg" alt="Horizontal Miiniilove logo" style="width:min(720px,100%)"></div>
-        <p><b>পাশাপাশি লোগো (Horizontal)</b><br>আইকন বাঁয়ে, নাম ডানে। ওয়েবসাইটের হেডার, ফেসবুক কভার, ব্যানার আর ইমেইল সিগনেচারের মতো চওড়া কিন্তু নিচু জায়গায়।</p>
+        <p><b>Horizontal logo</b><br>Icon on the left, name on the right. For wide, short spaces such as website headers, Facebook covers, banners and email signatures.</p>
       </div>
     </div>
   </section>
@@ -237,17 +237,17 @@ footer img { width: 72px; height: auto; }
   <section id="anatomy">
     <div class="head">
       <span class="eyebrow">Anatomy</span>
-      <h2>লোগোর গঠন</h2>
-      <p>লোগোর প্রতিটা অংশের একটা মানে আছে। কোনো অংশ সরানো, বদলানো বা নতুন কিছু যোগ করা যাবে না।</p>
+      <h2>Logo anatomy</h2>
+      <p>Every part of the logo has a meaning. Don't remove, change or add anything.</p>
     </div>
     <div class="anatomy">
       <div class="stage" style="min-height:340px"><img src="assets/miiniilove-icon.svg" alt="Miiniilove icon" style="width:min(340px,90%)"></div>
       <ul class="parts">
-        <li><span class="dot" style="background:var(--orange)"></span><div><b>কমলা হার্ট</b><br>ভালোবাসা আর যত্ন। বাবা-মা সন্তানের জন্য যে ভালোবাসা নিয়ে কেনাকাটা করেন, তার প্রতীক।</div></li>
-        <li><span class="dot" style="background:var(--cream)"></span><div><b>হার্টের ভেতরে "M"</b><br>Miiniilove-এর প্রথম অক্ষর। ফোলা, গোলগাল আকারটা নরম খেলনা আর আরামদায়ক কাপড়ের কথা মনে করায়।</div></li>
-        <li><span class="dot" style="background:var(--sun)"></span><div><b>হলুদ আর টিল ব্লব</b><br>খেলা, রঙ আর আনন্দ। হার্টের পেছনে থাকে, কখনো সামনে আসে না।</div></li>
-        <li><span class="dot" style="background:var(--teal)"></span><div><b>দুই পাশের স্প্ল্যাশ</b><br>বাচ্চাদের উচ্ছ্বাস আর চঞ্চলতা।</div></li>
-        <li><span class="dot" style="background:var(--orange)"></span><div><b>i-এর মাথায় হার্ট, "o"-এর ভেতরে হার্ট</b><br>নামের মধ্যেই ভালোবাসা। চারটা i-এর প্রতিটার মাথায় একটা করে হার্ট থাকবে।</div></li>
+        <li><span class="dot" style="background:var(--orange)"></span><div><b>Orange heart</b><br>Love and care: the love parents put into every choice they make for their child.</div></li>
+        <li><span class="dot" style="background:var(--cream)"></span><div><b>The "M" inside the heart</b><br>The first letter of Miiniilove. Its puffy, rounded shape recalls soft toys and comfy clothes.</div></li>
+        <li><span class="dot" style="background:var(--sun)"></span><div><b>Yellow and teal blobs</b><br>Play, colour and fun. They always sit behind the heart, never in front.</div></li>
+        <li><span class="dot" style="background:var(--teal)"></span><div><b>Splash marks on each side</b><br>The energy and excitement of little ones.</div></li>
+        <li><span class="dot" style="background:var(--orange)"></span><div><b>Hearts on the "i"s and inside the "o"</b><br>Love built into the name. Each of the four "i"s always has a heart on top.</div></li>
       </ul>
     </div>
   </section>
@@ -255,8 +255,8 @@ footer img { width: 72px; height: auto; }
   <section id="space">
     <div class="head">
       <span class="eyebrow">Clear space &amp; minimum size</span>
-      <h2>চারপাশে জায়গা আর সবচেয়ে ছোট সাইজ</h2>
-      <p>লোগোর চারপাশে কমপক্ষে <b>2x</b> খালি জায়গা রাখুন। এখানে <b>x</b> হলো "i"-এর মাথার হার্টটার উচ্চতা। এই জায়গার মধ্যে কোনো লেখা, ছবি বা কাগজের কিনারা আসবে না।</p>
+      <h2>Clear space and minimum size</h2>
+      <p>Keep at least <b>2x</b> of empty space around the logo, where <b>x</b> is the height of the heart on top of an "i". No text, images or page edges may enter this space.</p>
     </div>
     <div class="rules">
       <div class="clear">
@@ -267,10 +267,10 @@ footer img { width: 72px; height: auto; }
         </div>
       </div>
       <div class="sizes">
-        <div class="size"><img src="assets/miiniilove-stacked.svg" alt=""><div class="min">30 mm · 120 px<span>মূল লোগোর সবচেয়ে কম চওড়া</span></div></div>
-        <div class="size"><img src="assets/miiniilove-horizontal.svg" alt=""><div class="min">45 mm · 180 px<span>পাশাপাশি লোগোর সবচেয়ে কম চওড়া</span></div></div>
-        <div class="size"><img src="assets/miiniilove-icon.svg" alt=""><div class="min">12 mm · 48 px<span>স্প্ল্যাশসহ আইকন</span></div></div>
-        <div class="size"><img src="assets/miiniilove-icon-simple.svg" alt=""><div class="min">6 mm · 16 px<span>এর চেয়ে ছোট জায়গায় স্প্ল্যাশ ছাড়া আইকন ব্যবহার করুন (ফেভিকন, ছোট লেবেল, এমব্রয়ডারি)</span></div></div>
+        <div class="size"><img src="assets/miiniilove-stacked.svg" alt=""><div class="min">30 mm · 120 px<span>Minimum width of the primary logo</span></div></div>
+        <div class="size"><img src="assets/miiniilove-horizontal.svg" alt=""><div class="min">45 mm · 180 px<span>Minimum width of the horizontal logo</span></div></div>
+        <div class="size"><img src="assets/miiniilove-icon.svg" alt=""><div class="min">12 mm · 48 px<span>Icon with splash marks</span></div></div>
+        <div class="size"><img src="assets/miiniilove-icon-simple.svg" alt=""><div class="min">6 mm · 16 px<span>Below 48 px, use the simple icon without splash marks (favicons, small labels, embroidery)</span></div></div>
       </div>
     </div>
   </section>
@@ -278,8 +278,8 @@ footer img { width: 72px; height: auto; }
   <section id="color">
     <div class="head">
       <span class="eyebrow">Colour</span>
-      <h2>ব্র্যান্ড কালার</h2>
-      <p>Miiniilove-এর চারটা ব্র্যান্ড কালার। লোগো আর ব্র্যান্ডের সব ডিজাইনে শুধু এই চারটা কালারই ব্যবহার হবে। কোডে ক্লিক করলে কপি হবে।</p>
+      <h2>Brand colours</h2>
+      <p>Miiniilove has four brand colours. The logo and all brand designs use only these four. Click a code to copy it.</p>
     </div>
     <div class="swatches">
       <div class="swatch">
@@ -288,7 +288,7 @@ footer img { width: 72px; height: auto; }
           <dt>HEX</dt><dd><button class="copy" type="button" data-copy="#EC802B">#EC802B</button></dd>
           <dt>RGB</dt><dd>236 · 128 · 43</dd>
           <dt>CMYK</dt><dd>0 · 46 · 82 · 7</dd>
-          <dd class="use">প্রধান কালার। হার্ট, "love" লেখা, বোতাম আর সবচেয়ে গুরুত্বপূর্ণ জিনিসে।</dd>
+          <dd class="use">The lead colour. For the heart, the word "love", buttons and the most important elements.</dd>
         </dl>
       </div>
       <div class="swatch">
@@ -297,7 +297,7 @@ footer img { width: 72px; height: auto; }
           <dt>HEX</dt><dd><button class="copy" type="button" data-copy="#66BCB4">#66BCB4</button></dd>
           <dt>RGB</dt><dd>102 · 188 · 180</dd>
           <dt>CMYK</dt><dd>46 · 0 · 4 · 26</dd>
-          <dd class="use">দ্বিতীয় কালার। নামের "M" আর "n", ব্লব, হেডিং আর ব্যাকগ্রাউন্ড ব্লকে।</dd>
+          <dd class="use">The second colour. For the "M" and "n" in the name, the blobs, headings and background blocks.</dd>
         </dl>
       </div>
       <div class="swatch">
@@ -306,7 +306,7 @@ footer img { width: 72px; height: auto; }
           <dt>HEX</dt><dd><button class="copy" type="button" data-copy="#EDC55B">#EDC55B</button></dd>
           <dt>RGB</dt><dd>237 · 197 · 91</dd>
           <dt>CMYK</dt><dd>0 · 17 · 62 · 7</dd>
-          <dd class="use">হাইলাইট কালার। অল্প জায়গায়, যেমন ব্লব, স্প্ল্যাশ, স্টিকার আর অফার ব্যাজে।</dd>
+          <dd class="use">The highlight colour. Use it in small amounts: blobs, splash marks, stickers and offer badges.</dd>
         </dl>
       </div>
       <div class="swatch">
@@ -315,35 +315,35 @@ footer img { width: 72px; height: auto; }
           <dt>HEX</dt><dd><button class="copy" type="button" data-copy="#E8CCAD">#E8CCAD</button></dd>
           <dt>RGB</dt><dd>232 · 204 · 173</dd>
           <dt>CMYK</dt><dd>0 · 12 · 25 · 9</dd>
-          <dd class="use">ব্যাকগ্রাউন্ড কালার। প্যাকেজিং, ব্যাগ, কার্ড আর পোস্টের পটভূমিতে। লেখায় নয়।</dd>
+          <dd class="use">The background colour. For packaging, bags, cards and post backgrounds. Not for text.</dd>
         </dl>
       </div>
     </div>
 
     <div class="head" style="margin-top:12px">
-      <h3>সহায়ক কালার</h3>
-      <p class="small">এই দুটো ব্র্যান্ড কালার নয়, শুধু পটভূমি আর ছোট লেখা পড়ার সুবিধার জন্য। লোগোতে কোকো কালার ব্যবহার হয় না।</p>
+      <h3>Support colours</h3>
+      <p class="small">These two are not brand colours. They are only for backgrounds and readable small text. Cocoa is never used in the logo.</p>
     </div>
     <div class="support">
       <div class="swatch">
         <div class="chip" style="background:var(--cream);border-right:1.5px solid var(--line)"></div>
         <dl>
           <dt>Cream</dt><dd><button class="copy" type="button" data-copy="#FDFAEE">#FDFAEE</button></dd>
-          <dd class="use">হালকা পটভূমি, আর হার্টের ভেতরের "M" ও চকচকে দাগ।</dd>
+          <dd class="use">Light backgrounds, and the "M" and shine inside the heart.</dd>
         </dl>
       </div>
       <div class="swatch">
         <div class="chip" style="background:var(--cocoa)"></div>
         <dl>
           <dt>Cocoa</dt><dd><button class="copy" type="button" data-copy="#4A3426">#4A3426</button></dd>
-          <dd class="use">দাম, উপকরণ, সাইজ চার্টের মতো ছোট লেখা, যেখানে ব্র্যান্ড কালারে পড়তে কষ্ট হয়।</dd>
+          <dd class="use">Small text such as prices, materials and size charts, where brand colours are hard to read.</dd>
         </dl>
       </div>
     </div>
 
     <div class="head" style="margin-top:12px">
-      <h3>কোন কালার কতটা</h3>
-      <p class="small">একটা ডিজাইনে মোটামুটি এই অনুপাত রাখুন। হালকা পটভূমি বেশি, হলুদ সবচেয়ে কম।</p>
+      <h3>Colour proportions</h3>
+      <p class="small">Keep roughly this balance in a design: mostly light backgrounds, with yellow used the least.</p>
     </div>
     <div class="ratio" role="img" aria-label="Colour proportions: cream 40 percent, light brown 20 percent, orange 20 percent, teal 12 percent, yellow 8 percent">
       <div style="flex:40;background:var(--cream)">Cream 40%</div>
@@ -354,69 +354,68 @@ footer img { width: 72px; height: auto; }
     </div>
 
     <div class="head" style="margin-top:12px">
-      <h3>কোন পটভূমিতে কোন লোগো</h3>
-      <p class="small">হালকা পটভূমিতে রঙিন লোগো। কমলা বা টিল পটভূমিতে সাদা এক-কালারের লোগো। এমব্রয়ডারি, স্ক্রিন প্রিন্ট বা স্ট্যাম্পে এক-কালারের লোগো।</p>
+      <h3>Which logo on which background</h3>
+      <p class="small">Use the full-colour logo on light backgrounds and the white logo on orange or teal. For embroidery, screen printing and stamps, use a one-colour logo.</p>
     </div>
     <div class="backs">
-      <div class="back"><div class="stage" style="background:var(--cream);border:1.5px solid var(--line)"><img src="assets/miiniilove-stacked.svg" alt="Full-colour logo on cream"></div><div class="verdict"><span class="ok">ঠিক</span> ক্রিম পটভূমিতে রঙিন লোগো</div></div>
-      <div class="back"><div class="stage" style="background:var(--sand)"><img src="assets/miiniilove-stacked.svg" alt="Full-colour logo on light brown"></div><div class="verdict"><span class="ok">ঠিক</span> হালকা বাদামিতে রঙিন লোগো</div></div>
-      <div class="back"><div class="stage" style="background:var(--orange)"><img src="assets/miiniilove-stacked-white-on-orange.svg" alt="White logo on orange"></div><div class="verdict"><span class="ok">ঠিক</span> কমলায় সাদা লোগো</div></div>
-      <div class="back"><div class="stage" style="background:var(--teal)"><img src="assets/miiniilove-stacked-white-on-teal.svg" alt="White logo on teal"></div><div class="verdict"><span class="ok">ঠিক</span> টিলে সাদা লোগো</div></div>
-      <div class="back"><div class="stage" style="background:var(--paper);border:1.5px solid var(--line)"><img src="assets/miiniilove-stacked-orange.svg" alt="One-colour orange logo"></div><div class="verdict"><span class="ok">ঠিক</span> এক-কালারের কমলা লোগো</div></div>
-      <div class="back"><div class="stage" style="background:var(--paper);border:1.5px solid var(--line)"><img src="assets/miiniilove-stacked-teal.svg" alt="One-colour teal logo"></div><div class="verdict"><span class="ok">ঠিক</span> এক-কালারের টিল লোগো</div></div>
-      <div class="back"><div class="stage s-yellow"><img src="assets/miiniilove-stacked.svg" alt="Full-colour logo on yellow, not allowed"></div><div class="verdict"><span class="no">ভুল</span> হলুদে রঙিন লোগো: ব্লব আর লেখা মিশে যায়</div></div>
-      <div class="back"><div class="stage" style="background:var(--orange)"><img src="assets/miiniilove-stacked.svg" alt="Full-colour logo on orange, not allowed"></div><div class="verdict"><span class="no">ভুল</span> কমলায় রঙিন লোগো: হার্ট হারিয়ে যায়</div></div>
+      <div class="back"><div class="stage" style="background:var(--cream);border:1.5px solid var(--line)"><img src="assets/miiniilove-stacked.svg" alt="Full-colour logo on cream"></div><div class="verdict"><span class="ok">Do</span> Full colour on cream</div></div>
+      <div class="back"><div class="stage" style="background:var(--sand)"><img src="assets/miiniilove-stacked.svg" alt="Full-colour logo on light brown"></div><div class="verdict"><span class="ok">Do</span> Full colour on light brown</div></div>
+      <div class="back"><div class="stage" style="background:var(--orange)"><img src="assets/miiniilove-stacked-white-on-orange.svg" alt="White logo on orange"></div><div class="verdict"><span class="ok">Do</span> White on orange</div></div>
+      <div class="back"><div class="stage" style="background:var(--teal)"><img src="assets/miiniilove-stacked-white-on-teal.svg" alt="White logo on teal"></div><div class="verdict"><span class="ok">Do</span> White on teal</div></div>
+      <div class="back"><div class="stage" style="background:var(--paper);border:1.5px solid var(--line)"><img src="assets/miiniilove-stacked-orange.svg" alt="One-colour orange logo"></div><div class="verdict"><span class="ok">Do</span> One colour, orange</div></div>
+      <div class="back"><div class="stage" style="background:var(--paper);border:1.5px solid var(--line)"><img src="assets/miiniilove-stacked-teal.svg" alt="One-colour teal logo"></div><div class="verdict"><span class="ok">Do</span> One colour, teal</div></div>
+      <div class="back"><div class="stage s-yellow"><img src="assets/miiniilove-stacked.svg" alt="Full-colour logo on yellow, not allowed"></div><div class="verdict"><span class="no">Don't</span> Full colour on yellow: the blob and letters disappear</div></div>
+      <div class="back"><div class="stage" style="background:var(--orange)"><img src="assets/miiniilove-stacked.svg" alt="Full-colour logo on orange, not allowed"></div><div class="verdict"><span class="no">Don't</span> Full colour on orange: the heart disappears</div></div>
     </div>
   </section>
 
   <section id="type">
     <div class="head">
       <span class="eyebrow">Typography</span>
-      <h2>ফন্ট</h2>
-      <p>লোগোর লেখাটা আলাদা করে আঁকা, তাই কোনো ফন্ট দিয়ে "Miiniilove" টাইপ করে লোগো বানাবেন না। বাকি সব লেখার জন্য এই তিনটা ফ্রি Google Font ব্যবহার করুন।</p>
+      <h2>Typography</h2>
+      <p>The logo lettering is custom drawn, so never type "Miiniilove" in a font to make the logo. For all other text, use these three free Google Fonts.</p>
     </div>
     <div class="type">
-      <div class="face"><div class="sample f-fredoka">Aa Toys</div><div><b>Fredoka</b> · SemiBold</div><div class="role">ইংরেজি হেডিং, অফার, প্রোডাক্টের নাম।</div></div>
-      <div class="face"><div class="sample f-baloo">অআ খেলনা</div><div><b>Baloo Da 2</b> · ExtraBold</div><div class="role">বাংলা হেডিং আর বড় লেখা। গোলগাল আকার লোগোর সাথে মেলে।</div></div>
-      <div class="face"><div class="sample f-hind">অআ পোশাক</div><div><b>Hind Siliguri</b> · Regular / Medium</div><div class="role">বাংলা ও ইংরেজি সাধারণ লেখা, প্রোডাক্টের বিবরণ, ছোট লেখা।</div></div>
+      <div class="face"><div class="sample f-fredoka">Aa Toys</div><div><b>Fredoka</b> · SemiBold</div><div class="role">English headings, offers and product names.</div></div>
+      <div class="face"><div class="sample f-baloo">অআ খেলনা</div><div><b>Baloo Da 2</b> · ExtraBold</div><div class="role">Bangla headings and large text. Its rounded shapes match the logo.</div></div>
+      <div class="face"><div class="sample f-hind">অআ পোশাক</div><div><b>Hind Siliguri</b> · Regular / Medium</div><div class="role">Body text in Bangla and English, product descriptions and small text.</div></div>
     </div>
     <div class="specimen">
-      <div class="h">ছোট্ট হাসির জন্য <em>বড় ভালোবাসা</em></div>
-      <div class="en">Soft toys and comfy clothes for little ones</div>
-      <p>নরম সুতির জামা আর নিরাপদ খেলনা, যত্ন করে বাছাই করা ০ থেকে ৮ বছরের বাচ্চাদের জন্য। প্রতিটা প্রোডাক্ট বাচ্চাদের ত্বক আর হাতের কথা ভেবে বানানো।</p>
+      <div class="h">Big love for <em>little smiles</em></div>
+      <div class="en" style="font-family:'Baloo Da 2',sans-serif;font-weight:800">ছোট্ট হাসির জন্য বড় ভালোবাসা</div>
+      <p>Soft cotton clothes and safe toys, carefully chosen for children aged 0 to 8. Every product is made with little hands and sensitive skin in mind.</p>
     </div>
     <div class="scale">
-      <div><span>বড় হেডিং</span><span>Baloo Da 2 ExtraBold · 40–56 px · লাইন উচ্চতা 1.15</span></div>
-      <div><span>ছোট হেডিং</span><span>Baloo Da 2 Bold · 22–28 px · লাইন উচ্চতা 1.25</span></div>
-      <div><span>ইংরেজি হেডিং</span><span>Fredoka SemiBold · 20–48 px</span></div>
-      <div><span>সাধারণ লেখা</span><span>Hind Siliguri Regular · 16–18 px · লাইন উচ্চতা 1.7</span></div>
-      <div><span>ছোট লেখা / লেবেল</span><span>Hind Siliguri Medium · 12–14 px · Cocoa কালারে</span></div>
+      <div><span>Large heading</span><span>Fredoka SemiBold (English) or Baloo Da 2 ExtraBold (Bangla) · 40–56 px · line height 1.15</span></div>
+      <div><span>Small heading</span><span>Fredoka SemiBold or Baloo Da 2 Bold · 22–28 px · line height 1.25</span></div>
+            <div><span>Body text</span><span>Hind Siliguri Regular · 16–18 px · line height 1.7</span></div>
+      <div><span>Small text / labels</span><span>Hind Siliguri Medium · 12–14 px · in Cocoa</span></div>
     </div>
   </section>
 
   <section id="rules">
     <div class="head">
       <span class="eyebrow">Don'ts</span>
-      <h2>লোগো নিয়ে যা করবেন না</h2>
-      <p>লোগো সবসময় দেওয়া ফাইল থেকেই ব্যবহার করুন। নিচের কোনো পরিবর্তন করবেন না।</p>
+      <h2>What not to do with the logo</h2>
+      <p>Always use the supplied logo files, and never make any of these changes.</p>
     </div>
     <div class="dd">
-      <figure><div class="stage s-stretch"><img src="assets/miiniilove-stacked.svg" alt="Stretched logo"></div><figcaption><span class="no">ভুল</span> টেনে লম্বা বা চ্যাপ্টা করবেন না। সাইজ বদলালে সবসময় অনুপাত ঠিক রাখুন।</figcaption></figure>
-      <figure><div class="stage s-rotate"><img src="assets/miiniilove-stacked.svg" alt="Rotated logo"></div><figcaption><span class="no">ভুল</span> বাঁকা বা ঘুরিয়ে বসাবেন না।</figcaption></figure>
-      <figure><div class="stage s-recolor"><img src="assets/miiniilove-stacked.svg" alt="Logo in off-brand colours"></div><figcaption><span class="no">ভুল</span> ব্র্যান্ডের চারটা কালারের বাইরে কোনো কালার দেবেন না।</figcaption></figure>
-      <figure><div class="stage s-shadow"><img src="assets/miiniilove-stacked.svg" alt="Logo with a drop shadow"></div><figcaption><span class="no">ভুল</span> শ্যাডো, আউটলাইন, গ্লো বা গ্রেডিয়েন্ট যোগ করবেন না।</figcaption></figure>
-      <figure><div class="stage s-busy"><img src="assets/miiniilove-stacked.svg" alt="Logo on a busy striped background"></div><figcaption><span class="no">ভুল</span> ভিড়ভাট্টা প্যাটার্ন বা ছবির ওপর বসাবেন না। দরকার হলে নিচে ক্রিম বা সাদা প্লেট দিন।</figcaption></figure>
-      <figure><div class="stage s-crowd"><img src="assets/miiniilove-stacked.svg" alt="Logo crowded by text" style="width:70%"><span style="top:8px;left:10px">SALE!</span><span style="bottom:10px;right:12px">৫০% ছাড়</span></div><figcaption><span class="no">ভুল</span> চারপাশের 2x খালি জায়গার মধ্যে লেখা বা ছবি রাখবেন না।</figcaption></figure>
-      <figure><div class="stage"><span style="font-family:var(--display);font-weight:700;font-size:2.2rem;color:var(--orange)">Minilove</span></div><figcaption><span class="no">ভুল</span> বানান বদলাবেন না। সবসময় <b>Miiniilove</b>, দুই জায়গায় "ii"।</figcaption></figure>
-      <figure><div class="stage" style="display:flex;gap:10px;align-items:center;justify-content:center"><span style="font-family:var(--display);font-weight:700;font-size:1.7rem;color:var(--teal)">Miiniilove</span><img src="assets/miiniilove-icon-simple.svg" alt="" style="width:30%"></div><figcaption><span class="no">ভুল</span> অংশগুলো নতুন করে সাজাবেন না বা ফন্ট দিয়ে নাম টাইপ করবেন না।</figcaption></figure>
+      <figure><div class="stage s-stretch"><img src="assets/miiniilove-stacked.svg" alt="Stretched logo"></div><figcaption><span class="no">Don't</span> stretch or squash it. Always keep the proportions when resizing.</figcaption></figure>
+      <figure><div class="stage s-rotate"><img src="assets/miiniilove-stacked.svg" alt="Rotated logo"></div><figcaption><span class="no">Don't</span> tilt or rotate it.</figcaption></figure>
+      <figure><div class="stage s-recolor"><img src="assets/miiniilove-stacked.svg" alt="Logo in off-brand colours"></div><figcaption><span class="no">Don't</span> use colours outside the four brand colours.</figcaption></figure>
+      <figure><div class="stage s-shadow"><img src="assets/miiniilove-stacked.svg" alt="Logo with a drop shadow"></div><figcaption><span class="no">Don't</span> add shadows, outlines, glows or gradients.</figcaption></figure>
+      <figure><div class="stage s-busy"><img src="assets/miiniilove-stacked.svg" alt="Logo on a busy striped background"></div><figcaption><span class="no">Don't</span> place it on busy patterns or photos. If you must, put a cream or white panel behind it.</figcaption></figure>
+      <figure><div class="stage s-crowd"><img src="assets/miiniilove-stacked.svg" alt="Logo crowded by text" style="width:70%"><span style="top:8px;left:10px">SALE!</span><span style="bottom:10px;right:12px">50% OFF</span></div><figcaption><span class="no">Don't</span> put text or images inside the 2x clear space.</figcaption></figure>
+      <figure><div class="stage"><span style="font-family:var(--display);font-weight:700;font-size:2.2rem;color:var(--orange)">Minilove</span></div><figcaption><span class="no">Don't</span> change the spelling. It is always <b>Miiniilove</b>, with "ii" twice.</figcaption></figure>
+      <figure><div class="stage" style="display:flex;gap:10px;align-items:center;justify-content:center"><span style="font-family:var(--display);font-weight:700;font-size:1.7rem;color:var(--teal)">Miiniilove</span><img src="assets/miiniilove-icon-simple.svg" alt="" style="width:30%"></div><figcaption><span class="no">Don't</span> rearrange the parts or type the name in a font.</figcaption></figure>
     </div>
   </section>
 
   <section id="use">
     <div class="head">
       <span class="eyebrow">Applications</span>
-      <h2>ব্যবহারের উদাহরণ</h2>
-      <p>খেলনা আর পোশাকে লোগো কীভাবে বসবে তার কয়েকটা উদাহরণ।</p>
+      <h2>Applications</h2>
+      <p>A few examples of the logo on toys and clothing.</p>
     </div>
     <div class="apps">
       <div class="app">
@@ -426,19 +425,19 @@ footer img { width: 72px; height: auto; }
             <img src="assets/miiniilove-icon-simple.svg" alt="">
           </div>
         </div>
-        <p><b>বাচ্চাদের টি-শার্ট</b><br>বুকের বাঁ দিকে বা মাঝখানে ছোট আইকন। এমব্রয়ডারিতে স্প্ল্যাশ ছাড়া আইকন।</p>
+        <p><b>Kids' T-shirt</b><br>A small icon on the left chest or centre. For embroidery, use the icon without splash marks.</p>
       </div>
       <div class="app">
         <div class="stage"><div class="tag"><img src="assets/miiniilove-stacked-white-on-orange.svg" alt=""></div></div>
-        <p><b>কাপড়ের হ্যাং ট্যাগ</b><br>কমলা ট্যাগে সাদা লোগো। পেছনে দাম আর সাইজ Cocoa কালারে।</p>
+        <p><b>Clothing hang tag</b><br>White logo on an orange tag. Price and size on the back, in Cocoa.</p>
       </div>
       <div class="app">
         <div class="stage"><div class="bag"><img src="assets/miiniilove-stacked.svg" alt=""></div></div>
-        <p><b>শপিং ব্যাগ ও খেলনার বাক্স</b><br>হালকা বাদামি পটভূমিতে রঙিন মূল লোগো, হাতল কমলা।</p>
+        <p><b>Shopping bag and toy box</b><br>Full-colour primary logo on light brown, with an orange handle.</p>
       </div>
       <div class="app">
         <div class="stage"><div class="avatar"><div class="circle"><img src="assets/miiniilove-icon-simple-white-on-orange.svg" alt=""></div><span class="name">@miiniilove</span></div></div>
-        <p><b>সোশ্যাল মিডিয়া প্রোফাইল</b><br>গোল ফ্রেমে কমলা পটভূমিতে সাদা আইকন। ছোট সাইজেও পরিষ্কার দেখা যায়।</p>
+        <p><b>Social media profile</b><br>White icon on orange in a round frame. It stays clear even at small sizes.</p>
       </div>
     </div>
   </section>
@@ -446,33 +445,33 @@ footer img { width: 72px; height: auto; }
   <section id="voice">
     <div class="head">
       <span class="eyebrow">Voice</span>
-      <h2>ব্র্যান্ডের ভাষা</h2>
-      <p>Miiniilove কথা বলে একজন আদরের খালা বা মামার মতো: উষ্ণ, হাসিখুশি আর সহজ ভাষায়। বাবা-মায়ের সাথে কথা বলে, বাচ্চাদের কথা ভেবে।</p>
+      <h2>Brand voice</h2>
+      <p>Miiniilove talks like a favourite aunt or uncle: warm, cheerful and simple. It speaks to parents, with their children in mind.</p>
     </div>
     <div class="voice">
-      <div class="trait"><h3>উষ্ণ</h3><p class="small">যত্ন আর ভালোবাসার কথা আগে, দাম পরে।</p><div class="say">"ছোট্ট হাতের জন্য নরম খেলনা"</div></div>
-      <div class="trait"><h3>হাসিখুশি</h3><p class="small">ছোট বাক্য, খেলার মতো শব্দ। ইমোজি অল্প।</p><div class="say">"নতুন রঙে নতুন খেলা!"</div></div>
-      <div class="trait"><h3>ভরসার</h3><p class="small">কাপড়, বয়স আর নিরাপত্তার তথ্য পরিষ্কার করে বলুন।</p><div class="say">"১০০% সুতি · ২–৩ বছর"</div></div>
+      <div class="trait"><h3>Warm</h3><p class="small">Care and love come first, price second.</p><div class="say">"Soft toys for tiny hands"</div></div>
+      <div class="trait"><h3>Cheerful</h3><p class="small">Short sentences and playful words. Few emoji.</p><div class="say">"New colours, new adventures!"</div></div>
+      <div class="trait"><h3>Trustworthy</h3><p class="small">State fabric, age and safety details clearly.</p><div class="say">"100% cotton · Ages 2–3"</div></div>
     </div>
   </section>
 
   <section>
     <div class="files">
-      <h3>লোগো ফাইল</h3>
-      <p class="small">সব ফাইল প্রজেক্টের <code>docs/brand/miiniilove/guideline/assets/</code> ফোল্ডারে আছে। SVG ফাইল যেকোনো সাইজে বড় করলেও ঝাপসা হয় না, আর পটভূমি ট্রান্সপারেন্ট।</p>
+      <h3>Logo files</h3>
+      <p class="small">All files are in the project's <code>docs/brand/miiniilove/guideline/assets/</code> folder. The SVG files stay sharp at any size and have transparent backgrounds.</p>
       <ul class="small">
-        <li><code>miiniilove-stacked.svg</code>, <code>miiniilove-horizontal.svg</code>, <code>miiniilove-icon.svg</code>: রঙিন মূল লোগো</li>
-        <li><code>miiniilove-icon-simple.svg</code>: স্প্ল্যাশ ছাড়া আইকন, ছোট সাইজের জন্য</li>
-        <li><code>miiniilove-stacked-orange.svg</code>, <code>-teal.svg</code>, <code>miiniilove-horizontal-orange.svg</code>: এক-কালারের লোগো</li>
-        <li><code>miiniilove-stacked-white-on-orange.svg</code>, <code>-white-on-teal.svg</code>, <code>miiniilove-icon-simple-white-on-orange.svg</code>: কমলা বা টিল পটভূমির জন্য সাদা লোগো</li>
+        <li><code>miiniilove-stacked.svg</code>, <code>miiniilove-horizontal.svg</code>, <code>miiniilove-icon.svg</code>: full-colour logos</li>
+        <li><code>miiniilove-icon-simple.svg</code>: icon without splash marks, for small sizes</li>
+        <li><code>miiniilove-stacked-orange.svg</code>, <code>-teal.svg</code>, <code>miiniilove-horizontal-orange.svg</code>: one-colour logos</li>
+        <li><code>miiniilove-stacked-white-on-orange.svg</code>, <code>-white-on-teal.svg</code>, <code>miiniilove-icon-simple-white-on-orange.svg</code>: white logos for orange or teal backgrounds</li>
       </ul>
-      <p class="small">CMYK মানগুলো আনুমানিক। প্রিন্টের আগে প্রেস থেকে একটা কালার প্রুফ দেখে নিন।</p>
+      <p class="small">CMYK values are approximate. Ask the printer for a colour proof before a print run.</p>
     </div>
   </section>
 
   <footer>
     <img src="assets/miiniilove-icon-simple.svg" alt="">
-    <p class="small">Miiniilove Brand Guideline · Orange Heart · ২০২৬</p>
+    <p class="small">Miiniilove Brand Guideline · Orange Heart · 2026</p>
   </footer>
 </main>
 
@@ -480,7 +479,7 @@ footer img { width: 72px; height: auto; }
 document.querySelectorAll('.copy').forEach(function (btn) {
   btn.addEventListener('click', function () {
     var v = btn.getAttribute('data-copy');
-    var done = function () { var t = btn.textContent; btn.textContent = 'কপি হয়েছে'; setTimeout(function () { btn.textContent = t; }, 1200); };
+    var done = function () { var t = btn.textContent; btn.textContent = 'Copied'; setTimeout(function () { btn.textContent = t; }, 1200); };
     try {
       navigator.clipboard.writeText(v).then(done, function () { selectText(btn); });
     } catch (e) { selectText(btn); }
